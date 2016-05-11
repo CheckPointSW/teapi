@@ -15,16 +15,16 @@
 import json
 import os
 from re import findall
-from api.request import Payload
+
 import requests
-from utils.file_data import FileData
-from utils.logging import Logger
-from utils.logging import LogLevel
 
 import utils.gs
+from api.request import Payload
 from av import AvData
 from te import TeData
-
+from utils.file_data import FileData
+from utils.logging import LogLevel
+from utils.logging import Logger
 
 DEFAULT_REPORTS = [utils.gs.XML]
 DEFAULT_FEATURES = [utils.gs.TE]
@@ -45,15 +45,17 @@ class Run:
     cookies = {}
     report_set = set()
 
-    def __init__(self, scan_directory, api_key, reports_folder, features=DEFAULT_FEATURES, debug=DEFAULT_DEBUG,
-                 benign_reports=DEFAULT_BENIGN_REPORTS, reports=DEFAULT_REPORTS, recursive=DEFAULT_RECURSIVE_EMULATION):
+    def __init__(self, scan_directory, api_key, reports_folder,
+                 features=DEFAULT_FEATURES,
+                 benign_reports=DEFAULT_BENIGN_REPORTS,
+                 reports=DEFAULT_REPORTS,
+                 recursive=DEFAULT_RECURSIVE_EMULATION):
         """
         Setting the requested parameters and creating
         :param scan_directory: the requested directory
         :param api_key: API Key fot the cloud service
         :param reports_folder: the folder which the reports will be save to
         :param features: the requested features
-        :param debug: enable or disable debugs
         :param benign_reports: Request also reports for benign files
         :param reports: type of reports
         :param recursive: find files in the requested directory recursively
@@ -71,14 +73,16 @@ class Run:
             if not os.path.exists(reports_folder):
                 os.makedirs(reports_folder)
         except Exception as e:
-            Logger.log(LogLevel.CRITICAL, 'failed to create the needed folders', e)
+            Logger.log(LogLevel.CRITICAL,
+                       'failed to create the needed folders', e)
 
         max_files = DEFAULT_MAX_FILES
         Logger.log(LogLevel.INFO, 'Calculating hash of files ')
         for root, subdir_list, file_list in os.walk(scan_directory):
             for file_name in file_list:
                 if max_files == 0:
-                    Logger.log(LogLevel.INFO, 'Max of %d files' % DEFAULT_MAX_FILES)
+                    Logger.log(LogLevel.INFO,
+                               'Max of %d files' % DEFAULT_MAX_FILES)
                     break
                 else:
                     max_files -= 1
@@ -95,11 +99,12 @@ class Run:
         :param response: the response which contains the cookie
         """
         if 'te_cookie' in response.cookies:
-                self.cookies['te_cookie'] = response.cookies['te_cookie']
+            self.cookies['te_cookie'] = response.cookies['te_cookie']
 
     def upload_directory(self):
 
-        for file_data in self.pending.values():  # Use copy of the list for proper removal
+        # Use copy of the list for proper removal
+        for file_data in self.pending.values():
             if not file_data.upload:
                 continue
             try:
@@ -109,7 +114,10 @@ class Run:
                 Logger.log(LogLevel.DEBUG, json_request)
 
                 files = {'request': json_request, 'file': file_to_send}
-                json_response = requests.post(utils.gs.UPLOAD_SELECTOR, files=files, headers=self.headers, cookies=self.cookies)
+                json_response = requests.post(utils.gs.UPLOAD_SELECTOR,
+                                              files=files,
+                                              headers=self.headers,
+                                              cookies=self.cookies)
                 if not self.handle_response(json_response):
                     break
 
@@ -124,10 +132,13 @@ class Run:
 
         try:
             if first_time:
-                resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload, headers=self.headers)
+                resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload,
+                                     headers=self.headers)
                 self.set_cookie(resp)
             else:
-                resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload, headers=self.headers, cookies=self.cookies)
+                resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload,
+                                     headers=self.headers,
+                                     cookies=self.cookies)
             self.handle_response(resp, first_time)
         except IOError as e:
             Logger.log(LogLevel.ERROR, 'IO_ERROR', e)
@@ -140,7 +151,8 @@ class Run:
             return False
 
         parse_json = json.loads(json_response.text)
-        Logger.log(LogLevel.DEBUG, json.dumps(parse_json, indent=4, sort_keys=True))
+        Logger.log(LogLevel.DEBUG,
+                   json.dumps(parse_json, indent=4, sort_keys=True))
         response_list = parse_json[utils.gs.RESPONSE]
 
         if type(response_list) is not list:
@@ -148,11 +160,14 @@ class Run:
 
         for response_object in response_list:
             file_data = self.pending.get(response_object[utils.gs.MD5])
-            if utils.gs.TE in file_data.features and utils.gs.TE in response_object:
-                found = TeData.handle_te_response(file_data, response_object, first_time)
+            if utils.gs.TE in file_data.features \
+                    and utils.gs.TE in response_object:
+                found = TeData.handle_te_response(file_data, response_object,
+                                                  first_time)
                 if found:
                     self.download_reports(response_object[utils.gs.TE])
-            if utils.gs.AV in file_data.features and utils.gs.AV in response_object:
+            if utils.gs.AV in file_data.features \
+                    and utils.gs.AV in response_object:
                 AvData.handle_av_response(file_data, response_object)
             if not file_data.features:
                 self.finished.append(self.pending.pop(file_data.md5))
@@ -162,10 +177,12 @@ class Run:
     def download_file(self, file_id, image_id):
 
         params = {'id': file_id}
-        r = requests.get(utils.gs.DOWNLOAD_SELECTOR, headers=self.headers, params=params, stream=True)
+        r = requests.get(utils.gs.DOWNLOAD_SELECTOR, headers=self.headers,
+                         params=params, stream=True)
         name = findall('filename=\'(.*)\"', r.headers['content-disposition'])
         if len(name) > 0 and name[0]:
-            file_name = os.path.join(self.reports_folder, '%s_%s' % (str(image_id), str(name[0])))
+            file_name = os.path.join(self.reports_folder,
+                                     '%s_%s' % (str(image_id), str(name[0])))
         else:
             Logger.log(LogLevel.ERROR, 'ERROR FILE NAME')
             return
@@ -205,7 +222,8 @@ class Run:
     def print_array(array, text):
         array_size = len(array)
         if array_size > 0:
-            Logger.log(LogLevel.INFO, '----------- %s %s files -----------' % (str(array_size), text))
+            Logger.log(LogLevel.INFO, '----------- %s %s files -----------' % (
+                str(array_size), text))
             for one_file in array:
                 Logger.log(LogLevel.INFO, str(one_file))
 

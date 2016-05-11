@@ -12,8 +12,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import os
 import hashlib
+import os
 
 
 class FileData:
@@ -34,7 +34,8 @@ class FileData:
         self.te = None
 
     def __str__(self):
-        string = 'Name: %s,\tMD5: %s,\tSHA1: %s' % (self.file_name, self.md5, self.sha1)
+        string = 'Name: %s,\tMD5: %s,\tSHA1: %s' % (
+            self.file_name, self.md5, self.sha1)
         if self.status:
             string = '%s ERROR: %s' % (string, self.status)
         if self.av:
@@ -45,8 +46,8 @@ class FileData:
 
     def compute_hashes(self):
         """
-        This function should be called when we need to compute the hashes of the file.
-        Currently computes sha1 and md5.
+        This function should be called when we need to compute the
+        hashes of the file. Currently computes sha1 and md5.
         """
         self.md5 = self.md5_of_file(self.file_path)
         self.sha1 = self.sha1_of_file(self.file_path)
@@ -56,11 +57,12 @@ class FileData:
         """
         Calculated hash of file
         :param f: file
-        :param digest_algorithm: digest algorithm according to it the file will be calculate
+        :param digest_algorithm: digest algorithm according to it the
+        file will be calculate
         :return:
         """
         while True:
-            block = f.read(2**10)
+            block = f.read(2 ** 10)
             if not block:
                 break
             digest_algorithm.update(block)

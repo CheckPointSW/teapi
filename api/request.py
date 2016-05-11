@@ -22,14 +22,14 @@ class Payload:
 
     def create_payload(self, file_name, file_type, features):
         return {
-                    'file_name': file_name,
-                    'file_type': file_type,
-                    'features': features,
-                    'te': {
-                        'benign_reports': self.benign_reports,
-                        'reports': self.reports
-                    }
-                }
+            'file_name': file_name,
+            'file_type': file_type,
+            'features': features,
+            'te': {
+                'benign_reports': self.benign_reports,
+                'reports': self.reports
+            }
+        }
 
     def create_md5_payload(self, md5, file_name, file_type, features):
         json_object = self.create_payload(file_name, file_type, features)
@@ -49,10 +49,21 @@ class Payload:
     def create_query_payload(self, files):
         payload = {'request': []}
         for file_data in files.values():
-            payload['request'].append(self.create_md5_payload(file_data.md5, file_data.file_name, file_data.file_type,
-                                                              file_data.features))
+            payload['request'].append(
+                self.create_md5_payload(
+                    file_data.md5,
+                    file_data.file_name,
+                    file_data.file_type,
+                    file_data.features
+                )
+            )
         return json.dumps(payload, indent=4)
 
     def create_upload_payload(self, file_data):
-        return json.dumps({'request': self.create_md5_payload(file_data.md5, file_data.file_name, file_data.file_type,
-                                                              file_data.features)}, indent=4)
+        return json.dumps(
+            {'request': self.create_md5_payload(
+                file_data.md5,
+                file_data.file_name,
+                file_data.file_type,
+                file_data.features)},
+            indent=4)

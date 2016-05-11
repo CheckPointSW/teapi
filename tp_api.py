@@ -27,22 +27,36 @@ MAX_TRIES = MAX_TIME_MIN * 60 / WAITING_SEC
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Threat Prevention API example')
-    parser.add_argument('-D', '--directory', help='The scanning directory', required=True)
-    parser.add_argument('-r', '--reports', help='A folder to download the reports to', required=True)
-    parser.add_argument('-t', '--te', action='store_true', help='Activate Threat Emulation')
-    parser.add_argument('-a', '--av', action='store_true', help='Activate Anti-Virus')
-    parser.add_argument('-d', '--debug', action='store_true', help='Add debugging')
+    parser = \
+        argparse.ArgumentParser(description='Threat Prevention API example')
+
+    parser.add_argument('-D', '--directory',
+                        help='The scanning directory',
+                        required=True)
+    parser.add_argument('-r', '--reports',
+                        help='A folder to download the reports to',
+                        required=True)
+    parser.add_argument('-t', '--te', action='store_true',
+                        help='Activate Threat Emulation')
+    parser.add_argument('-a', '--av', action='store_true',
+                        help='Activate Anti-Virus')
+    parser.add_argument('-d', '--debug', action='store_true',
+                        help='Add debugging')
     parser.add_argument('-k', '--key', help='API key', required=True)
-    parser.add_argument('-p', '--pdf', action='store_true', help='Download PDF reports',)
-    parser.add_argument('-x', '--xml', action='store_true', help='Download XML reports',)
-    parser.add_argument('-b', '--benign', action='store_true', help='Enable benign file reports')
-    parser.add_argument('-R', '--recursive', action='store_true', help='Emulate the files in the directory recursively')
+    parser.add_argument('-p', '--pdf', action='store_true',
+                        help='Download PDF reports',)
+    parser.add_argument('-x', '--xml', action='store_true',
+                        help='Download XML reports',)
+    parser.add_argument('-b', '--benign', action='store_true',
+                        help='Enable benign file reports')
+    parser.add_argument('-R', '--recursive', action='store_true',
+                        help='Emulate the files in the directory recursively')
     args = parser.parse_args()
 
     Logger.level = LogLevel.DEBUG if args.debug else LogLevel.INFO
 
-    # Asking the API to enable features and reports according to what was required by the user.
+    # Asking the API to enable features and reports according
+    # to what was required by the user.
     features = []
     reports = []
 
@@ -61,7 +75,6 @@ def main():
               args.key,
               args.reports,
               features,
-              args.debug,
               args.benign,
               reports,
               args.recursive)
@@ -70,7 +83,8 @@ def main():
         Logger.log(LogLevel.INFO, 'The directory is empty')
         exit(0)
 
-    Logger.log(LogLevel.INFO, 'Querying %d files from directory: %s' % (len(api.pending), args.directory))
+    Logger.log(LogLevel.INFO, 'Querying %d files from directory: %s'
+               % (len(api.pending), args.directory))
 
     api.query_directory(True)
     api.print_arrays_status()
@@ -91,4 +105,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

@@ -21,18 +21,18 @@ def enum(*sequential, **named):
     enums['reverse_mapping'] = reverse
     return type('Enum', (), enums)
 
+
 LogLevel = enum(
-        CRITICAL=50,
-        ERROR=40,
-        WARNING=30,
-        INFO=20,
-        DEBUG=10,
-        NOTSET=0
+    CRITICAL=50,
+    ERROR=40,
+    WARNING=30,
+    INFO=20,
+    DEBUG=10,
+    NOTSET=0
 )
 
 
 class Logger:
-
     def __init__(self):
         pass
 
@@ -43,8 +43,8 @@ class Logger:
 
         if cls.level <= level:
             time_str = strftime('%Y-%m-%d %H:%M:%S', gmtime())
-            log_str = '[%s][%s] %s' % (time_str, LogLevel.reverse_mapping[level], message)
+            log_str = '[%s][%s] %s' % (
+                time_str, LogLevel.reverse_mapping[level], message)
             print log_str
             if e:
                 print e
-

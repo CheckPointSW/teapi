@@ -16,7 +16,8 @@ import utils.gs
 
 
 class AvData:
-    def __init__(self, found=False, signature_name='', malware_family=0, malware_type=0, severity=0, confidence=0):
+    def __init__(self, found=False, signature_name='', malware_family=0,
+                 malware_type=0, severity=0, confidence=0):
         self.found = found
         self.signature_name = signature_name
         self.malware_family = malware_family  # 0 - 5 (0-none, 1-low, 5 high)
@@ -26,17 +27,21 @@ class AvData:
 
     def __str__(self):
         if self.found:
-            return 'AV: Found - Name: %s, Family: %d, Type: %d, Severity: %d, Confidence: %d' % (self.signature_name,
-                                                                                                 self.malware_family,
-                                                                                                 self.malware_type,
-                                                                                                 self.severity,
-                                                                                                 self.confidence)
+            return 'AV: Found - Name: %s, Family: %d, Type: %d, ' \
+                   'Severity: %d, Confidence: %d' % (
+                       self.signature_name,
+                       self.malware_family,
+                       self.malware_type,
+                       self.severity,
+                       self.confidence)
         else:
             return 'AV: Not Found'
 
     @classmethod
-    def found(cls, signature_name, malware_family, malware_type, severity, confidence):
-        return cls(True, signature_name, malware_family, malware_type, severity, confidence)
+    def found(cls, signature_name, malware_family, malware_type, severity,
+              confidence):
+        return cls(True, signature_name, malware_family, malware_type,
+                   severity, confidence)
 
     @classmethod
     def not_found(cls):
@@ -51,12 +56,13 @@ class AvData:
         if response_label in (
                 utils.gs.FOUND, utils.gs.PARTIALLY_FOUND):
             av_info = av_object[utils.gs.AV_INFO]
-            file_data.av = AvData.found(av_info[utils.gs.AV_NAME], av_info[
-                utils.gs.AV_FAMILY], av_info[
-                                            utils.gs.AV_TYPE],
-                                        av_info[utils.gs.AV_SEVERITY], av_info[
-                                            utils.gs.AV_CONFIDENCE])
+            file_data.av = AvData.found(
+                av_info[utils.gs.AV_NAME],
+                av_info[utils.gs.AV_FAMILY],
+                av_info[utils.gs.AV_TYPE],
+                av_info[utils.gs.AV_SEVERITY],
+                av_info[utils.gs.AV_CONFIDENCE]
+            )
         else:
             file_data.av = AvData.not_found()
         file_data.features.remove(utils.gs.AV)
-

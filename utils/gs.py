@@ -19,7 +19,7 @@ QUERY = 'query'
 UPLOAD = 'upload'
 DOWNLOAD = 'download'
 QUERY_SELECTOR = '%s%s' % (URI, QUERY)
-UPLOAD_SELECTOR = '%s%s' % (URI,  UPLOAD)
+UPLOAD_SELECTOR = '%s%s' % (URI, UPLOAD)
 DOWNLOAD_SELECTOR = '%s%s' % (URI, DOWNLOAD)
 
 # Request Strings
@@ -51,7 +51,6 @@ MALICIOUS = 'malicious'
 ERROR = 'error'
 MESSAGE = 'message'
 
-
 # TE Strings
 TE_VERDICT = 'combined_verdict'
 TE_SEVERITY = 'severity'
@@ -64,6 +63,3 @@ AV_FAMILY = 'malware_family'  # 0 - 5 (0-none, 1-low, 5 high)
 AV_TYPE = 'malware_type'
 AV_SEVERITY = 'severity'
 AV_CONFIDENCE = 'confidence'
-
-
-

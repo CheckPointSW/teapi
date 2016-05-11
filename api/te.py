@@ -43,7 +43,8 @@ class TeData:
         if self.verdict == utils.gs.BENIGN:
             return 'TE: Benign'
         elif self.verdict == utils.gs.MALICIOUS:
-            return 'TE: Malicious, Severity: %d, Confidence: %d' % (self.severity, self.confidence)
+            return 'TE: Malicious, Severity: %d, Confidence: %d' % (
+                self.severity, self.confidence)
         else:
             return 'TE: Error: %s' % self.status
 
@@ -55,8 +56,10 @@ class TeData:
             utils.gs.LABEL]
         found = False
 
-        if response_label == utils.gs.FOUND or \
-                (response_object == utils.gs.PARTIALLY_FOUND and not first_time):
+        if response_label == utils.gs.FOUND \
+                or \
+                (response_object == utils.gs.PARTIALLY_FOUND and not first_time
+                 ):
             file_data.upload = False
             if utils.gs.TE_VERDICT in te_object:
                 if te_object[
@@ -67,19 +70,16 @@ class TeData:
                 elif te_object[
                     utils.gs.TE_VERDICT] == \
                         utils.gs.MALICIOUS:
-                    file_data.te = TeData.malicious(te_object[
-                                                        utils.gs.TE_CONFIDENCE
-                                                    ],
-                                                    te_object[
-                                                        utils.gs.TE_SEVERITY
-                                                    ])
+                    file_data.te = TeData.malicious(
+                        te_object[utils.gs.TE_CONFIDENCE],
+                        te_object[utils.gs.TE_SEVERITY])
                     found = True
                 else:
                     file_data.te = TeData.error('verdict is %s' % te_object[
                         utils.gs.TE_VERDICT])
             else:
-                file_data.te = TeData.error(te_object[utils.gs.STATUS][
-                                                utils.gs.MESSAGE])
+                file_data.te = TeData.error(
+                    te_object[utils.gs.STATUS][utils.gs.MESSAGE])
 
             file_data.features.remove(utils.gs.TE)
 
