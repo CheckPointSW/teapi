@@ -1,4 +1,4 @@
-#   Copyright 2015 Check Point Software Technologies LTD
+#   Copyright 2016 Check Point Software Technologies LTD
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import utils.gs
 
 
 class TeData:
-    def __init__(self, verdict="", confidence=0, severity=0, status=""):
+    def __init__(self, verdict='', confidence=0, severity=0, status=''):
         """
         This class handles TE response.
         """
@@ -41,11 +41,11 @@ class TeData:
 
     def __str__(self):
         if self.verdict == utils.gs.BENIGN:
-            return "TE: Benign"
+            return 'TE: Benign'
         elif self.verdict == utils.gs.MALICIOUS:
-            return "TE: Malicious, Severity: %d, Confidence: %d" % (self.severity, self.confidence)
+            return 'TE: Malicious, Severity: %d, Confidence: %d' % (self.severity, self.confidence)
         else:
-            return "TE: Error: %s" % self.status
+            return 'TE: Error: %s' % self.status
 
     @staticmethod
     def handle_te_response(file_data, response_object, first_time):
@@ -75,7 +75,7 @@ class TeData:
                                                     ])
                     found = True
                 else:
-                    file_data.te = TeData.error("verdict is %s" % te_object[
+                    file_data.te = TeData.error('verdict is %s' % te_object[
                         utils.gs.TE_VERDICT])
             else:
                 file_data.te = TeData.error(te_object[utils.gs.STATUS][
@@ -88,7 +88,7 @@ class TeData:
                 utils.gs.FORBIDDEN) or \
                 (response_label == utils.gs.NOT_FOUND and not first_time):
 
-            file_data.te = TeData.error("The status is " + response_label)
+            file_data.te = TeData.error('The status is: %s' % response_label)
             file_data.features.remove(utils.gs.TE)
 
         elif response_label in (

@@ -1,4 +1,4 @@
-#   Copyright 2015 Check Point Software Technologies LTD
+#   Copyright 2016 Check Point Software Technologies LTD
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -25,22 +25,22 @@ class FileData:
         self.file_name = file_name
         self.file_type = os.path.splitext(file_name)[1][1:]
         self.file_path = os.path.join(folder_name, file_name)
-        self.md5 = ""
-        self.sha1 = ""
+        self.md5 = ''
+        self.sha1 = ''
         self.features = features
-        self.status = ""
+        self.status = ''
         self.upload = True
         self.av = None
         self.te = None
 
     def __str__(self):
-        string = "Name: %s,\tMD5: %s,\tSHA1: %s" % (self.file_name, self.md5, self.sha1)
+        string = 'Name: %s,\tMD5: %s,\tSHA1: %s' % (self.file_name, self.md5, self.sha1)
         if self.status:
-            string += " ERROR: %s" % self.status
+            string = '%s ERROR: %s' % (string, self.status)
         if self.av:
-            string += "\n\t" + str(self.av)
+            string = '%s\n\t%s' % (string, str(self.av))
         if self.te:
-            string += "\n\t" + str(self.te)
+            string = '%s\n\t%s' % (string, str(self.te))
         return string
 
     def compute_hashes(self):

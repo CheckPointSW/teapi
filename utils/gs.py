@@ -1,4 +1,4 @@
-#   Copyright 2015 Check Point Software Technologies LTD
+#   Copyright 2016 Check Point Software Technologies LTD
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -14,56 +14,56 @@
 
 
 # URI Strings
-URI = "https://te.checkpoint.com/tecloud/api/v1/file/"
-QUERY = "query"
-UPLOAD = "upload"
-DOWNLOAD = "download"
-QUERY_SELECTOR = URI + QUERY
-UPLOAD_SELECTOR = URI + UPLOAD
-DOWNLOAD_SELECTOR = URI + DOWNLOAD
+URI = 'https://te.checkpoint.com/tecloud/api/v1/file/'
+QUERY = 'query'
+UPLOAD = 'upload'
+DOWNLOAD = 'download'
+QUERY_SELECTOR = '%s%s' % (URI, QUERY)
+UPLOAD_SELECTOR = '%s%s' % (URI,  UPLOAD)
+DOWNLOAD_SELECTOR = '%s%s' % (URI, DOWNLOAD)
 
 # Request Strings
-MD5 = "md5"
-SHA1 = "sha1"
-SHA256 = "sha256"
+MD5 = 'md5'
+SHA1 = 'sha1'
+SHA256 = 'sha256'
 
-TE = "te"
-AV = "av"
+TE = 'te'
+AV = 'av'
 
-PDF = "pdf"
-XML = "xml"
+PDF = 'pdf'
+XML = 'xml'
 
 # Response Strings
-STATUS = "status"
-LABEL = "label"
-RESPONSE = "response"
+STATUS = 'status'
+LABEL = 'label'
+RESPONSE = 'response'
 
-FOUND = "FOUND"
-PARTIALLY_FOUND = "PARTIALLY_FOUND"
-NOT_FOUND = "NOT_FOUND"
-UPLOAD_SUCCESS = "UPLOAD_SUCCESS"
-PENDING = "PENDING"
-NO_QUOTA = "NO_QUOTA"
-FORBIDDEN = "FORBIDDEN"
+FOUND = 'FOUND'
+PARTIALLY_FOUND = 'PARTIALLY_FOUND'
+NOT_FOUND = 'NOT_FOUND'
+UPLOAD_SUCCESS = 'UPLOAD_SUCCESS'
+PENDING = 'PENDING'
+NO_QUOTA = 'NO_QUOTA'
+FORBIDDEN = 'FORBIDDEN'
 
-BENIGN = "benign"
-MALICIOUS = "malicious"
-ERROR = "error"
-MESSAGE = "message"
+BENIGN = 'benign'
+MALICIOUS = 'malicious'
+ERROR = 'error'
+MESSAGE = 'message'
 
 
 # TE Strings
-TE_VERDICT = "combined_verdict"
-TE_SEVERITY = "severity"
-TE_CONFIDENCE = "confidence"
+TE_VERDICT = 'combined_verdict'
+TE_SEVERITY = 'severity'
+TE_CONFIDENCE = 'confidence'
 
 # AV Strings
-AV_INFO = "malware_info"
-AV_NAME = "signature_name"
-AV_FAMILY = "malware_family"  # 0 - 5 (0-none, 1-low, 5 high)
-AV_TYPE = "malware_type"
-AV_SEVERITY = "severity"
-AV_CONFIDENCE = "confidence"
+AV_INFO = 'malware_info'
+AV_NAME = 'signature_name'
+AV_FAMILY = 'malware_family'  # 0 - 5 (0-none, 1-low, 5 high)
+AV_TYPE = 'malware_type'
+AV_SEVERITY = 'severity'
+AV_CONFIDENCE = 'confidence'
 
 
 

@@ -1,4 +1,4 @@
-#   Copyright 2015 Check Point Software Technologies LTD
+#   Copyright 2016 Check Point Software Technologies LTD
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import utils.gs
 
 
 class AvData:
-    def __init__(self, found=False, signature_name="", malware_family=0, malware_type=0, severity=0, confidence=0):
+    def __init__(self, found=False, signature_name='', malware_family=0, malware_type=0, severity=0, confidence=0):
         self.found = found
         self.signature_name = signature_name
         self.malware_family = malware_family  # 0 - 5 (0-none, 1-low, 5 high)
@@ -26,13 +26,13 @@ class AvData:
 
     def __str__(self):
         if self.found:
-            return "AV: Found - Name: %s, Family: %d, Type: %d, Severity: %d, Confidence: %d" % (self.signature_name,
+            return 'AV: Found - Name: %s, Family: %d, Type: %d, Severity: %d, Confidence: %d' % (self.signature_name,
                                                                                                  self.malware_family,
                                                                                                  self.malware_type,
                                                                                                  self.severity,
                                                                                                  self.confidence)
         else:
-            return "AV: Not Found"
+            return 'AV: Not Found'
 
     @classmethod
     def found(cls, signature_name, malware_family, malware_type, severity, confidence):

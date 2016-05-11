@@ -1,4 +1,4 @@
-#   Copyright 2015 Check Point Software Technologies LTD
+#   Copyright 2016 Check Point Software Technologies LTD
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
 import argparse
 import os
 import time
+from utils.logging import Logger
+from utils.logging import LogLevel
 
 from api.logic import Run
 
@@ -22,39 +24,37 @@ WAITING_SEC = 30
 MAX_TIME_MIN = 30
 MAX_TRIES = MAX_TIME_MIN * 60 / WAITING_SEC
 
-if __name__ == "__main__":
+
+def main():
 
     parser = argparse.ArgumentParser(description='Threat Prevention API example')
-    parser.add_argument('-D', '--directory', help='The scanning directory')
-    parser.add_argument('-r', '--reports', help='A folder to download the reports to')
+    parser.add_argument('-D', '--directory', help='The scanning directory', required=True)
+    parser.add_argument('-r', '--reports', help='A folder to download the reports to', required=True)
     parser.add_argument('-t', '--te', action='store_true', help='Activate Threat Emulation')
     parser.add_argument('-a', '--av', action='store_true', help='Activate Anti-Virus')
     parser.add_argument('-d', '--debug', action='store_true', help='Add debugging')
     parser.add_argument('-k', '--key', help='API key', required=True)
     parser.add_argument('-p', '--pdf', action='store_true', help='Download PDF reports',)
     parser.add_argument('-x', '--xml', action='store_true', help='Download XML reports',)
-    parser.add_argument('-b', '--benign', action='store_true',
-                        help='Download benign reports (has severe impact on performance)')
+    parser.add_argument('-b', '--benign', action='store_true', help='Enable benign file reports')
     parser.add_argument('-R', '--recursive', action='store_true', help='Emulate the files in the directory recursively')
     args = parser.parse_args()
+
+    Logger.level = LogLevel.DEBUG if args.debug else LogLevel.INFO
 
     # Asking the API to enable features and reports according to what was required by the user.
     features = []
     reports = []
 
-    if args.te:
-        features.append("te")
-    if args.av:
-        features.append("av")
+    args.te and features.append('te')
+    args.av and features.append('av')
 
-    if args.xml:
-        reports.append("xml")
-    if args.pdf:
-        reports.append("pdf")
+    args.xml and reports.append('xml')
+    args.pdf and reports.append('pdf')
 
     # Verify the user values
     if not os.path.isdir(args.directory):
-        print("Invalid directory in input")
+        Logger.log(LogLevel.ERROR, 'Invalid directory in input')
         exit(1)
 
     api = Run(args.directory,
@@ -67,16 +67,16 @@ if __name__ == "__main__":
               args.recursive)
 
     if not api.is_pending_files():
-        print("The directory is empty")
+        Logger.log(LogLevel.INFO, 'The directory is empty')
         exit(0)
 
-    print("Querying " + str(len(api.pending)) + " files from directory: " + args.directory)
+    Logger.log(LogLevel.INFO, 'Querying %d files from directory: %s' % (len(api.pending), args.directory))
 
     api.query_directory(True)
     api.print_arrays_status()
 
     if api.is_pending_files():
-        print("UPLOADING"),
+        Logger.log(LogLevel.INFO, 'UPLOADING'),
         api.upload_directory()
         api.print_arrays_status()
 
@@ -88,3 +88,7 @@ if __name__ == "__main__":
         max_tries -= 1
 
     api.print_arrays()
+
+if __name__ == '__main__':
+    main()
+
