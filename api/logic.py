@@ -135,7 +135,9 @@ class Run:
                 resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload,
                                      headers=self.headers)
                 self.set_cookie(resp)
+                Logger.log(LogLevel.DEBUG, 'set cookie=', self.cookies)
             else:
+                Logger.log(LogLevel.DEBUG, 'cookie=', self.cookies)
                 resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload,
                                      headers=self.headers,
                                      cookies=self.cookies)
@@ -174,10 +176,17 @@ class Run:
 
         return True
 
-    def download_file(self, file_id, image_id, type):
+    def download_file(self, file_id, image_id):
         params = {'id': file_id}
-        r = requests.get(utils.gs.DOWNLOAD_SELECTOR, headers=self.headers, params=params, stream=True, cookies=self.cookies)
-        file_name = os.path.join(self.reports_folder,'%s_%s.%s' % (str(image_id), str(file_id), str(type)))
+        r = requests.get(utils.gs.DOWNLOAD_SELECTOR, headers=self.headers, 
+                         params=params, stream=True, cookies=self.cookies)
+        name = findall('attachment; filename=\"(.*)\"', r.headers['content-disposition'])
+        if len(name) > 0 and name[0]:
+            file_name = os.path.join(self.reports_folder,
+                                     '%s_%s' % (str(image_id), str(name[0])))
+        else:
+            Logger.log(LogLevel.ERROR, 'ERROR FILE NAME')
+            return
         with open(file_name, 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:  # filter out keep-alive new chunks
@@ -190,9 +199,9 @@ class Run:
             for image in json_response['images']:
                 report = image['report']
                 if 'pdf_report' in report:
-                    self.download_file(report['pdf_report'], image['id'], "pdf")
+                    self.download_file(report['pdf_report'], image['id'])
                 if 'xml_report' in report:
-                    self.download_file(report['xml_report'], image['id'], "xml")
+                    self.download_file(report['xml_report'], image['id'])
 
     def is_pending_files(self):
         """
