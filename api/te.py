@@ -86,7 +86,8 @@ class TeData:
         elif response_label in (
                 utils.gs.NO_QUOTA,
                 utils.gs.FORBIDDEN) or \
-                (response_label == utils.gs.NOT_FOUND and not first_time):
+                (response_label == utils.gs.NOT_FOUND and not first_time) or \
+                (response_label == utils.gs.PARTIALLY_FOUND and not first_time):
 
             file_data.te = TeData.error('The status is: %s' % response_label)
             file_data.features.remove(utils.gs.TE)
