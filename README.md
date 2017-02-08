@@ -33,8 +33,7 @@ Usage:
 ~~~~
 python tp_api.py --help
 
-usage: tp_api.py [-h] -D DIRECTORY -r REPORTS [-t] [-a] [-d] -k KEY [-p] [-x]
-                 [-b] [-R]
+usage: tp_api.py [-h] -D DIRECTORY -r REPORTS [-t] [-a] [-d] -k KEY [-p] [-x] [-R]
 
 Threat Prevention API example
 
@@ -50,7 +49,6 @@ optional arguments:
   -k KEY, --key KEY     API key
   -p, --pdf             Download PDF reports
   -x, --xml             Download XML reports
-  -b, --benign          Enable benign file reports
   -R, --recursive       Emulate the files in the directory recursively
 
 ~~~~
