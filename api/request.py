@@ -16,8 +16,7 @@ import json
 
 
 class Payload:
-    def __init__(self, benign_reports, reports):
-        self.benign_reports = benign_reports
+    def __init__(self, reports):
         self.reports = reports
 
     def create_payload(self, file_name, file_type, features):
@@ -26,7 +25,6 @@ class Payload:
             'file_type': file_type,
             'features': features,
             'te': {
-                'benign_reports': self.benign_reports,
                 'reports': self.reports
             }
         }
