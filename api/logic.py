@@ -29,7 +29,6 @@ from utils.logging import Logger
 DEFAULT_REPORTS = [utils.gs.XML]
 DEFAULT_FEATURES = [utils.gs.TE]
 DEFAULT_DEBUG = False
-DEFAULT_BENIGN_REPORTS = False
 DEFAULT_RECURSIVE_EMULATION = False
 DEFAULT_MAX_FILES = 500
 
@@ -47,7 +46,6 @@ class Run:
 
     def __init__(self, scan_directory, api_key, reports_folder,
                  features=DEFAULT_FEATURES,
-                 benign_reports=DEFAULT_BENIGN_REPORTS,
                  reports=DEFAULT_REPORTS,
                  recursive=DEFAULT_RECURSIVE_EMULATION):
         """
@@ -56,18 +54,16 @@ class Run:
         :param api_key: API Key fot the cloud service
         :param reports_folder: the folder which the reports will be save to
         :param features: the requested features
-        :param benign_reports: Request also reports for benign files
         :param reports: type of reports
         :param recursive: find files in the requested directory recursively
         """
         self.headers = {'Authorization': api_key}
         self.reports_folder = reports_folder
-        self.benign_reports = benign_reports
         if features:
             self.features = features
         else:
             self.features = DEFAULT_FEATURES
-        self.payload = Payload(benign_reports, reports)
+        self.payload = Payload(reports)
 
         try:
             if not os.path.exists(reports_folder):
