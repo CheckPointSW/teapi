@@ -47,8 +47,6 @@ def main():
                         help='Download PDF reports',)
     parser.add_argument('-x', '--xml', action='store_true',
                         help='Download XML reports',)
-    parser.add_argument('-b', '--benign', action='store_true',
-                        help='Enable benign file reports')
     parser.add_argument('-R', '--recursive', action='store_true',
                         help='Emulate the files in the directory recursively')
     args = parser.parse_args()
@@ -75,7 +73,6 @@ def main():
               args.key,
               args.reports,
               features,
-              args.benign,
               reports,
               args.recursive)
 
