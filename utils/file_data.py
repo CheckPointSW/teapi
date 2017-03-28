@@ -21,10 +21,10 @@ class FileData:
     Represents a file and contains all the data about that file.
     """
 
-    def __init__(self, file_name, folder_name, features):
+    def __init__(self, file_name, file_path, features):
         self.file_name = file_name
         self.file_type = os.path.splitext(file_name)[1][1:]
-        self.file_path = os.path.join(folder_name, file_name)
+        self.file_path = file_path
         self.md5 = ''
         self.sha1 = ''
         self.features = features
@@ -32,6 +32,7 @@ class FileData:
         self.upload = True
         self.av = None
         self.te = None
+        self.tex = None
 
     def __str__(self):
         string = 'Name: %s,\tMD5: %s,\tSHA1: %s' % (
@@ -42,6 +43,8 @@ class FileData:
             string = '%s\n\t%s' % (string, str(self.av))
         if self.te:
             string = '%s\n\t%s' % (string, str(self.te))
+        if self.tex:
+            string = '%s\n\t%s' % (string, str(self.tex))
         return string
 
     def compute_hashes(self):
