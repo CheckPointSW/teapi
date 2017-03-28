@@ -22,9 +22,11 @@ import utils.gs
 from api.request import Payload
 from av import AvData
 from te import TeData
+from tex import TexData
 from utils.file_data import FileData
 from utils.logging import LogLevel
 from utils.logging import Logger
+from requests_toolbelt import MultipartEncoder
 
 DEFAULT_REPORTS = [utils.gs.XML]
 DEFAULT_FEATURES = [utils.gs.TE]
@@ -44,29 +46,39 @@ class Run:
     cookies = {}
     report_set = set()
 
-    def __init__(self, scan_directory, api_key, reports_folder,
+    def __init__(self, scan_directory,file_path, file_name, api_key, server, reports_folder,tex_method, tex_folder,
                  features=DEFAULT_FEATURES,
                  reports=DEFAULT_REPORTS,
                  recursive=DEFAULT_RECURSIVE_EMULATION):
         """
         Setting the requested parameters and creating
         :param scan_directory: the requested directory
-        :param api_key: API Key fot the cloud service
+        :param file_path: the requested file path
+        :param file_name: the requested file name
+        :param api_key: API Key for the cloud service
+        :param server: Check Point SandBlast Appliance ip address
         :param reports_folder: the folder which the reports will be save to
+        :param tex_method: the method to be used with Thereat Extraction
+        :param tex_directory: the folder which the Scrubbing attachments will be save to
         :param features: the requested features
         :param reports: type of reports
         :param recursive: find files in the requested directory recursively
         """
-        self.headers = {'Authorization': api_key}
+        if api_key:
+            self.headers = {'Authorization': api_key}
+        else: self.headers = {}
         self.reports_folder = reports_folder
+        self.tex_folder = tex_folder
         if features:
             self.features = features
         else:
             self.features = DEFAULT_FEATURES
-        self.payload = Payload(reports)
+        self.payload = Payload(reports,tex_method)
+        self.server = server
+        self.verify = True
 
         try:
-            if not os.path.exists(reports_folder):
+            if reports_folder and not os.path.exists(reports_folder):
                 os.makedirs(reports_folder)
         except Exception as e:
             Logger.log(LogLevel.CRITICAL,
@@ -74,20 +86,25 @@ class Run:
 
         max_files = DEFAULT_MAX_FILES
         Logger.log(LogLevel.INFO, 'Calculating hash of files ')
-        for root, subdir_list, file_list in os.walk(scan_directory):
-            for file_name in file_list:
-                if max_files == 0:
-                    Logger.log(LogLevel.INFO,
+        if scan_directory:
+            for root, subdir_list, file_list in os.walk(ur'%s' % scan_directory):
+                for fn in file_list:
+                    if max_files == 0:
+                        Logger.log(LogLevel.INFO,
                                'Max of %d files' % DEFAULT_MAX_FILES)
+                        break
+                    else:
+                        max_files -= 1
+                    if os.path.isfile(os.path.join(root, fn)):
+                        file_data = FileData(fn.encode('utf-8'), os.path.join(root, fn), list(self.features))
+                        file_data.compute_hashes()
+                        self.pending[file_data.md5] = file_data
+                if not recursive or max_files == 0:
                     break
-                else:
-                    max_files -= 1
-                if os.path.isfile(os.path.join(root, file_name)):
-                    file_data = FileData(file_name, root, list(self.features))
-                    file_data.compute_hashes()
-                    self.pending[file_data.md5] = file_data
-            if not recursive or max_files == 0:
-                break
+        else:
+            file_data = FileData(file_name, file_path, list(self.features))
+            file_data.compute_hashes()
+            self.pending[file_data.md5] = file_data
 
     def set_cookie(self, response):
         """
@@ -100,46 +117,63 @@ class Run:
     def upload_directory(self):
 
         # Use copy of the list for proper removal
+        res = True
         for file_data in self.pending.values():
             if not file_data.upload:
                 continue
             try:
-                file_to_send = open(file_data.file_path, 'rb').read()
+                session = requests.Session()
                 json_request = self.payload.create_upload_payload(file_data)
 
                 Logger.log(LogLevel.DEBUG, json_request)
+                upload_url = utils.gs.get_selector(self.server, utils.gs.UPLOAD)
+                with open(file_data.file_path, 'rb') as f:
+                    form = MultipartEncoder({
+                        "request": json_request,
+                        "file": f,
+                    })
+                    headers= self.headers
+                    headers["Content-Type"] = form.content_type
+                    resp = session.post(upload_url,
+                                                 headers=headers,
+                                                 data=form,
+                                                 cookies=self.cookies,
+                                                 verify=self.verify)
 
-                files = {'request': json_request, 'file': file_to_send}
-                json_response = requests.post(utils.gs.UPLOAD_SELECTOR,
-                                              files=files,
-                                              headers=self.headers,
-                                              cookies=self.cookies)
-                if not self.handle_response(json_response):
-                    break
+                    Logger.log(LogLevel.DEBUG, resp)
+                    if not self.handle_response(resp):
+                        raise Exception('Failed to handle upload response')
 
             except Exception as e:
                 Logger.log(LogLevel.ERROR, 'Uploading Error', e)
+                res = False
                 continue
+        return res
+
 
     def query_directory(self, first_time):
-
+        query_url = utils.gs.get_selector(self.server, utils.gs.QUERY)
         payload = self.payload.create_query_payload(self.pending)
         Logger.log(LogLevel.DEBUG, payload)
 
         try:
             if first_time:
-                resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload,
-                                     headers=self.headers)
+                resp = requests.post(query_url, data=payload,
+                                     headers=self.headers, verify=self.verify)
                 self.set_cookie(resp)
                 Logger.log(LogLevel.DEBUG, 'set cookie=', self.cookies)
             else:
                 Logger.log(LogLevel.DEBUG, 'cookie=', self.cookies)
-                resp = requests.post(utils.gs.QUERY_SELECTOR, data=payload,
+                resp = requests.post(query_url, data=payload,
                                      headers=self.headers,
-                                     cookies=self.cookies)
-            self.handle_response(resp, first_time)
+                                     cookies=self.cookies,
+                                     verify=self.verify)
+            if not self.handle_response(resp, first_time):
+                return False
         except IOError as e:
             Logger.log(LogLevel.ERROR, 'IO_ERROR', e)
+            return False
+        return True
 
     def handle_response(self, json_response, first_time=False):
 
@@ -167,27 +201,46 @@ class Run:
             if utils.gs.AV in file_data.features \
                     and utils.gs.AV in response_object:
                 AvData.handle_av_response(file_data, response_object)
+            if utils.gs.TEX in file_data.features \
+                    and utils.gs.TEX in response_object:
+                TexData.handle_tex_response(file_data, response_object, first_time)
+                if  TexData.extracted_file_download_id:
+                    extraction_id = TexData.extracted_file_download_id
+                    if not self.download_file(extraction_id):
+                        Logger.log(LogLevel.ERROR, 'Failed to download extraction_id:', extraction_id)
+                        file_data.tex = TexData.error("Unable to download file_id=%s" % extraction_id)
+                        return True
+                    else: file_data.tex = TexData.log("Cleaned file was downloaded successfully file_id= %s" % extraction_id)
             if not file_data.features:
                 self.finished.append(self.pending.pop(file_data.md5))
 
         return True
 
-    def download_file(self, file_id, image_id):
+    def download_file(self, file_id, image_id=0):
         params = {'id': file_id}
-        r = requests.get(utils.gs.DOWNLOAD_SELECTOR, headers=self.headers, 
+        download_url = utils.gs.get_selector(self.server, utils.gs.DOWNLOAD)
+        r = requests.get(download_url, headers=self.headers,
                          params=params, stream=True, cookies=self.cookies)
         name = findall('attachment; filename=\"(.*)\"', r.headers['content-disposition'])
         if len(name) > 0 and name[0]:
-            file_name = os.path.join(self.reports_folder,
+            if image_id:
+                file_name = os.path.join(self.reports_folder,
                                      '%s_%s' % (str(image_id), str(name[0])))
+            else:
+                file_name = os.path.join(self.tex_folder,str(name[0]))
         else:
             Logger.log(LogLevel.ERROR, 'ERROR FILE NAME')
-            return
-        with open(file_name, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:  # filter out keep-alive new chunks
-                    f.write(chunk)
-                    f.flush()
+            return False
+        try:
+            with open(file_name, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                        f.flush()
+        except IOError as e:
+            Logger.log(LogLevel.ERROR, 'Save file IO_ERROR', e)
+            return False
+        return True
 
     def download_reports(self, json_response):
 
@@ -207,13 +260,21 @@ class Run:
         return len(self.pending) > 0
 
     def print_arrays(self):
-        self.print_array(self.pending, 'Pending')
-        self.print_array(self.finished, 'Finished')
+        if len(self.pending) > 0:
+            self.print_array(self.pending, 'Pending')
+        if len(self.error) > 0:
+            self.print_array(self.error, 'Error')
+        if len(self.finished) > 0:
+            self.print_array(self.finished, 'Finished')
 
     def print_arrays_status(self):
         Logger.log(LogLevel.INFO, 'PROGRESS:')
         self.print_status(self.pending, 'Pending')
+        self.print_status(self.error, 'Error')
         self.print_status(self.finished, 'Finished')
+
+    def get_final_status(self):
+        return self.get_status(self.finished)
 
     @staticmethod
     def print_array(array, text):
@@ -229,3 +290,16 @@ class Run:
         array_size = len(array)
         if array_size > 0:
             Logger.log(LogLevel.INFO, '%s: %s files' % (text, str(array_size)))
+
+    @staticmethod
+    def get_status(array):
+        array_size = len(array)
+        ret = -1
+        if array_size > 0:
+            for one_file in array:
+                if one_file.te:
+                    if one_file.te.status == utils.gs.TE_VERDICT_MALICIOUS or one_file.te.verdict == utils.gs.MALICIOUS:
+                        return True
+                    elif one_file.te.status == utils.gs.TE_VERDICT_BENIGN or one_file.te.verdict == utils.gs.BENIGN:
+                        ret = 0
+        return ret
