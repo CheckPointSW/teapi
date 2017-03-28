@@ -15,6 +15,9 @@
 
 # URI Strings
 URI = 'https://te.checkpoint.com/tecloud/api/v1/file/'
+PORT="18194"
+REMOTE_DIR="tecloud/api/v1/file"
+
 QUERY = 'query'
 UPLOAD = 'upload'
 DOWNLOAD = 'download'
@@ -22,12 +25,25 @@ QUERY_SELECTOR = '%s%s' % (URI, QUERY)
 UPLOAD_SELECTOR = '%s%s' % (URI, UPLOAD)
 DOWNLOAD_SELECTOR = '%s%s' % (URI, DOWNLOAD)
 
+def get_selector(ip_address,selector):
+    url=""
+    if ip_address:
+        url = 'https://%s:%s/%s/%s' %(ip_address,PORT,REMOTE_DIR,selector)
+    elif selector == QUERY:
+        url = QUERY_SELECTOR
+    elif selector == UPLOAD:
+        url = UPLOAD_SELECTOR
+    elif selector == DOWNLOAD:
+        url = DOWNLOAD_SELECTOR
+    return url
+
 # Request Strings
 MD5 = 'md5'
 SHA1 = 'sha1'
 SHA256 = 'sha256'
 
 TE = 'te'
+TEX = 'extraction'
 AV = 'av'
 
 PDF = 'pdf'
@@ -55,6 +71,8 @@ MESSAGE = 'message'
 TE_VERDICT = 'combined_verdict'
 TE_SEVERITY = 'severity'
 TE_CONFIDENCE = 'confidence'
+TE_VERDICT_MALICIOUS = 'verdict is Malicious'
+TE_VERDICT_BENIGN = 'verdict is Benign'
 
 # AV Strings
 AV_INFO = 'malware_info'
