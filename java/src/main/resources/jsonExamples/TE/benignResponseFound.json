@@ -1,0 +1,51 @@
+{
+  "response": [
+    {
+      "status": {
+        "code": 1001,
+        "label": "FOUND",
+        "message": "The request has been fully answered."
+      },
+      "md5": "ae19686c49f6bf6eb54296011d6b4fcf",
+      "file_type": "doc",
+      "file_name": "ascsacsa.doc",
+      "features": [
+        "te"
+      ],
+      "te": {
+        "combined_verdict": "benign",
+        "trust": 0,
+        "images": [
+          {
+            "report": {
+              "verdict": "benign",
+              "xml_report": null,
+              "pdf_report": null
+            },
+            "status": "found",
+            "id": "5e5de275-a103-4f67-b55b-47532918fa59",
+            "revision": 1
+          },
+          {
+            "report": {
+              "verdict": "benign",
+              "xml_report": null,
+              "pdf_report": null
+            },
+            "status": "found",
+            "id": "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+            "revision": 1
+          }
+        ],
+        "score": -2147483648,
+        "confidence": 0,
+        "severity": 0,
+        "status": {
+          "code": 1001,
+          "label": "FOUND",
+          "message": "The request has been fully answered."
+        }
+      }
+    }
+  ]
+}

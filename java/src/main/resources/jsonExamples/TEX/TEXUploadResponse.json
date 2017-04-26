@@ -1,0 +1,54 @@
+{
+  "response": {
+    "status": {
+      "code": 1002,
+      "label": "UPLOAD_SUCCESS",
+      "message": "The file was uploaded successfully."
+    },
+    "md5": "9212af6bde0672581dae602d38fb0da0",
+    "file_type": "pdf",
+    "file_name": "001174.pdf",
+    "features": [
+      "extraction",
+      "te"
+    ],
+    "te": {
+      "trust": 0,
+      "images": [
+        {
+          "report": {
+            "verdict": "unknown"
+          },
+          "status": "not_found",
+          "id": "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+          "revision": 1
+        },
+        {
+          "report": {
+            "verdict": "unknown"
+          },
+          "status": "not_found",
+          "id": "5e5de275-a103-4f67-b55b-47532918fa59",
+          "revision": 1
+        }
+      ],
+      "score": -2147483648,
+      "confidence": 0,
+      "severity": 0,
+      "status": {
+        "code": 1002,
+        "label": "UPLOAD_SUCCESS",
+        "message": "The file was uploaded successfully."
+      }
+    },
+    "extraction": {
+      "method": "pdf",
+      "status": {
+        "code": 1002,
+        "label": "UPLOAD_SUCCESS",
+        "message": "The file was uploaded successfully."
+      },
+      "tex_product": false
+    }
+  }
+}

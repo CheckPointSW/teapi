@@ -38,7 +38,6 @@ class TexData:
     def __str__(self):
         return "TEX : %s" % self.status
 
-
     @staticmethod
     def handle_tex_response(file_data, response_object, first_time):
         TexData.extracted_file_download_id = None
@@ -54,20 +53,19 @@ class TexData:
             filename = file_data.file_name.decode('utf-8')
             file_data.features.remove(utils.gs.TEX)
             if tex_object["extract_result"] == "CP_EXTRACT_RESULT_NOT_SCRUBBED":
-                file_data.tex = TexData.log("%s was not scrubbed" %filename)
+                file_data.tex = TexData.log("%s was not scrubbed" % filename)
                 return True
 
             if tex_object["extract_result"] != "CP_EXTRACT_RESULT_SUCCESS":
-                file_data.tex = TexData.error("Extraction did not succeed %s : extract_result: %s" % (filename,tex_object["extract_result"]))
+                file_data.tex = TexData.error(
+                    "Extraction did not succeed %s : extract_result: %s" % (filename, tex_object["extract_result"]))
                 return False
 
             if "extracted_file_download_id" not in tex_object:
-                file_data.tex = TexData.error("extracted_file_download_id is missing: %s " %filename)
+                file_data.tex = TexData.error("extracted_file_download_id is missing: %s " % filename)
                 return True
             else:
                 TexData.extracted_file_download_id = tex_object["extracted_file_download_id"]
-
-
 
         elif response_label in (
                 utils.gs.NO_QUOTA,

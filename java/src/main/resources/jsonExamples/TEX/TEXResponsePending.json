@@ -1,0 +1,76 @@
+{
+  "response": [
+    {
+      "status": {
+        "code": 1003,
+        "label": "PENDING",
+        "message": "The request is pending."
+      },
+      "md5": "b70a4ff376bc9dfed822b4b03993e0b2",
+      "file_type": "html?C=M;O=D",
+      "file_name": "index.html?C=M;O=D",
+      "features": [
+        "extraction",
+        "te"
+      ],
+      "te": {
+        "trust": 0,
+        "images": [
+          {
+            "report": {
+              "verdict": "unknown"
+            },
+            "status": "pending",
+            "id": "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+            "revision": 1
+          },
+          {
+            "report": {
+              "verdict": "unknown"
+            },
+            "status": "pending",
+            "id": "5e5de275-a103-4f67-b55b-47532918fa59",
+            "revision": 1
+          }
+        ],
+        "score": -2147483648,
+        "confidence": 0,
+        "severity": 0,
+        "status": {
+          "code": 1003,
+          "label": "PENDING",
+          "message": "The request is pending."
+        }
+      },
+      "extraction": {
+        "extract_result": "CP_EXTRACT_RESULT_SUCCESS",
+        "extraction_data": {
+          "input_extension": "html?C=M;O=D",
+          "input_real_extension": "html",
+          "message": "OK",
+          "orig_file_url": "",
+          "output_file_name": "index.cleaned.html?C=M;O=D.pdf",
+          "protection_name": "Potential malicious content extracted",
+          "protection_type": "Conversion to PDF",
+          "risk": 0.0,
+          "scrub_activity": "HTML file was converted to PDF",
+          "scrub_method": "Convert to PDF",
+          "scrub_result": 0.0,
+          "scrub_time": "0.233",
+          "scrubbed_content": ""
+        },
+        "method": "pdf",
+        "output_file_name": "index.cleaned.html?C=M;O=D.pdf",
+        "status": {
+          "code": 1001,
+          "label": "FOUND",
+          "message": "The request has been fully answered."
+        },
+        "tex_product": false,
+        "extract_content": "",
+        "extracted_file_download_id": "37e0ba30-709f-427b-89fa-b982f0a80415",
+        "time": "0.233"
+      }
+    }
+  ]
+}

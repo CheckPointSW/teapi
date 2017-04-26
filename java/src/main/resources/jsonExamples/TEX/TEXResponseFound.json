@@ -1,0 +1,79 @@
+{
+  "response": [
+    {
+      "status": {
+        "code": 1001,
+        "label": "FOUND",
+        "message": "The request has been fully answered."
+      },
+      "md5": "7306aaf574bf4aa04387649291a22d87",
+      "file_type": "pptx",
+      "file_name": "af401f74b7676a300a9e891e256873d6fe505b4d44be36a23497f584ed827fa4.pptx",
+      "features": [
+        "extraction",
+        "te"
+      ],
+      "te": {
+        "combined_verdict": "malicious",
+        "trust": 10,
+        "images": [
+          {
+            "report": {
+              "verdict": "malicious",
+              "pdf_report": "977d5814-183a-4bf6-a9cf-cf2b42bf8ed6"
+            },
+            "status": "found",
+            "id": "5e5de275-a103-4f67-b55b-47532918fa59",
+            "revision": 1
+          },
+          {
+            "report": {
+              "verdict": "malicious",
+              "pdf_report": "88eaa749-9087-4771-8c33-c38c405324ec"
+            },
+            "status": "found",
+            "id": "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+            "revision": 1
+          }
+        ],
+        "score": -2147483648,
+        "confidence": 3,
+        "severity": 4,
+        "status": {
+          "code": 1001,
+          "label": "FOUND",
+          "message": "The request has been fully answered."
+        }
+      },
+      "extraction": {
+        "extract_result": "CP_EXTRACT_RESULT_SUCCESS",
+        "extraction_data": {
+          "input_extension": "pptx",
+          "input_real_extension": "ppsx",
+          "message": "OK",
+          "orig_file_url": "",
+          "output_file_name": "af401f74b7676a300a9e891e256873d6fe505b4d44be36a23497f584ed827fa4.cleaned.pptx.pdf",
+          "protection_name": "Potential malicious content extracted",
+          "protection_type": "Conversion to PDF",
+          "risk": 4.0,
+          "scrub_activity": "Active content was found - PPSX file was converted to PDF",
+          "scrub_method": "Convert to PDF",
+          "scrub_result": 0.0,
+          "scrub_time": "0.037",
+          "scrubbed_content": "Embedded Objects"
+        },
+        "method": "pdf",
+        "output_file_name": "af401f74b7676a300a9e891e256873d6fe505b4d44be36a23497f584ed827fa4.cleaned.pptx.pdf",
+        "status": {
+          "code": 1001,
+          "label": "FOUND",
+          "message": "The request has been fully answered."
+        },
+        "tex_product": false,
+        "extract_content": "Embedded Objects",
+        "extracted_file_download_id": "b8d397b8-9cfe-463c-8389-2b9c265dd590",
+        "time": "0.037"
+      }
+    }
+  ]
+}

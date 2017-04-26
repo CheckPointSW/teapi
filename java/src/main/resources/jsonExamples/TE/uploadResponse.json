@@ -1,0 +1,44 @@
+{
+  "response" : {
+    "status" : {
+      "code" : 1002,
+      "label" : "UPLOAD_SUCCESS",
+      "message" : "The file was uploaded successfully."
+    },
+    "md5" : "003424676f15f5120383649c2004750b",
+    "file_type" : "pdf",
+    "file_name" : "edan.pdf",
+    "features" : [ "te" ],
+    "te" : {
+      "combined_verdict" : null,
+      "trust" : 0,
+      "images" : [ {
+        "report" : {
+          "verdict" : "unknown",
+          "xml_report" : null,
+          "pdf_report" : null
+        },
+        "status" : "not_found",
+        "id" : "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+        "revision" : 1
+      }, {
+        "report" : {
+          "verdict" : "unknown",
+          "xml_report" : null,
+          "pdf_report" : null
+        },
+        "status" : "not_found",
+        "id" : "5e5de275-a103-4f67-b55b-47532918fa59",
+        "revision" : 1
+      } ],
+      "score" : -2147483648,
+      "confidence" : 0,
+      "severity" : 0,
+      "status" : {
+        "code" : 1002,
+        "label" : "UPLOAD_SUCCESS",
+        "message" : "The file was uploaded successfully."
+      }
+    }
+  }
+}

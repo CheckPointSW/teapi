@@ -1,0 +1,51 @@
+{
+    "response": [
+        {
+            "features": [
+                "te"
+            ],
+            "file_name": "fd58acdfb1ce20a22ef42188d44ce62f6168d16f15292e671b25b622149ea210.exe",
+            "file_type": "exe",
+            "md5": "6bcf762a1e1eb922757d630f476fcda4",
+            "status": {
+                "code": 1001,
+                "label": "FOUND",
+                "message": "The request has been fully answered."
+            },
+            "te": {
+                "combined_verdict": "malicious",
+                "confidence": 3,
+                "images": [
+                    {
+                        "id": "5e5de275-a103-4f67-b55b-47532918fa59",
+                        "report": {
+                            "pdf_report": "146e8ce7-c149-49b5-8081-5e8f581327dd",
+                            "verdict": "malicious",
+                            "xml_report": "cac7f47b-57ec-45a7-9991-bb00900e5041"
+                        },
+                        "revision": 1,
+                        "status": "found"
+                    },
+                    {
+                        "id": "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+                        "report": {
+                            "pdf_report": "146e8ce7-c149-49b5-8081-5e8f581327dd",
+                            "verdict": "malicious",
+                            "xml_report": "d7109403-e59f-4585-841e-2908076e6f3b"
+                        },
+                        "revision": 1,
+                        "status": "found"
+                    }
+                ],
+                "score": -2147483648,
+                "severity": 4,
+                "status": {
+                    "code": 1001,
+                    "label": "FOUND",
+                    "message": "The request has been fully answered."
+                },
+                "trust": 10
+            }
+        }
+    ]
+}

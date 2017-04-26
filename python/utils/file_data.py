@@ -30,7 +30,6 @@ class FileData:
         self.features = features
         self.status = ''
         self.upload = True
-        self.av = None
         self.te = None
         self.tex = None
 
@@ -39,8 +38,6 @@ class FileData:
             self.file_name, self.md5, self.sha1)
         if self.status:
             string = '%s ERROR: %s' % (string, self.status)
-        if self.av:
-            string = '%s\n\t%s' % (string, str(self.av))
         if self.te:
             string = '%s\n\t%s' % (string, str(self.te))
         if self.tex:

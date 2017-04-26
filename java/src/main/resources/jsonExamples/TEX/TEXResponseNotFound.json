@@ -1,0 +1,56 @@
+{
+  "response": [
+    {
+      "status": {
+        "code": 1004,
+        "label": "NOT_FOUND",
+        "message": "Could not find the requested file. Please upload it."
+      },
+      "md5": "ab2b02556b3e2643b0cf9a6d3ac99c7a",
+      "file_type": "swf",
+      "file_name": "ab2b02556b3e2643b0cf9a6d3ac99c7a.swf",
+      "features": [
+        "extraction",
+        "te"
+      ],
+      "te": {
+        "trust": 0,
+        "images": [
+          {
+            "report": {
+              "verdict": "unknown"
+            },
+            "status": "not_found",
+            "id": "e50e99f3-5963-4573-af9e-e3f4750b55e2",
+            "revision": 1
+          },
+          {
+            "report": {
+              "verdict": "unknown"
+            },
+            "status": "not_found",
+            "id": "5e5de275-a103-4f67-b55b-47532918fa59",
+            "revision": 1
+          }
+        ],
+        "score": -2147483648,
+        "confidence": 0,
+        "severity": 0,
+        "status": {
+          "code": 1004,
+          "label": "NOT_FOUND",
+          "message": "Could not find the requested file. Please upload it."
+        }
+      },
+      "extraction": {
+        "method": "pdf",
+        "status": {
+          "code": 1004,
+          "label": "NOT_FOUND",
+          "message": "Could not find the requested file. Please upload it."
+        },
+        "tex_product": false
+      }
+    }
+  ]
+}

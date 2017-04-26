@@ -20,7 +20,6 @@ import requests
 
 import utils.gs
 from api.request import Payload
-from av import AvData
 from te import TeData
 from tex import TexData
 from utils.file_data import FileData
@@ -37,7 +36,6 @@ DEFAULT_MAX_FILES = 500
 
 class Run:
     te_feature = False
-    av_feature = False
 
     pending = {}
     finished = []
@@ -46,7 +44,7 @@ class Run:
     cookies = {}
     report_set = set()
 
-    def __init__(self, scan_directory,file_path, file_name, api_key, server, reports_folder,tex_method, tex_folder,
+    def __init__(self, scan_directory, file_path, file_name, api_key, server, reports_folder, tex_method, tex_folder,
                  features=DEFAULT_FEATURES,
                  reports=DEFAULT_REPORTS,
                  recursive=DEFAULT_RECURSIVE_EMULATION):
@@ -66,14 +64,15 @@ class Run:
         """
         if api_key:
             self.headers = {'Authorization': api_key}
-        else: self.headers = {}
+        else:
+            self.headers = {}
         self.reports_folder = reports_folder
         self.tex_folder = tex_folder
         if features:
             self.features = features
         else:
             self.features = DEFAULT_FEATURES
-        self.payload = Payload(reports,tex_method)
+        self.payload = Payload(reports, tex_method)
         self.server = server
         self.verify = True
 
@@ -91,7 +90,7 @@ class Run:
                 for fn in file_list:
                     if max_files == 0:
                         Logger.log(LogLevel.INFO,
-                               'Max of %d files' % DEFAULT_MAX_FILES)
+                                   'Max of %d files' % DEFAULT_MAX_FILES)
                         break
                     else:
                         max_files -= 1
@@ -132,13 +131,13 @@ class Run:
                         "request": json_request,
                         "file": f,
                     })
-                    headers= self.headers
+                    headers = self.headers
                     headers["Content-Type"] = form.content_type
                     resp = session.post(upload_url,
-                                                 headers=headers,
-                                                 data=form,
-                                                 cookies=self.cookies,
-                                                 verify=self.verify)
+                                        headers=headers,
+                                        data=form,
+                                        cookies=self.cookies,
+                                        verify=self.verify)
 
                     Logger.log(LogLevel.DEBUG, resp)
                     if not self.handle_response(resp):
@@ -149,7 +148,6 @@ class Run:
                 res = False
                 continue
         return res
-
 
     def query_directory(self, first_time):
         query_url = utils.gs.get_selector(self.server, utils.gs.QUERY)
@@ -198,19 +196,18 @@ class Run:
                                                   first_time)
                 if found:
                     self.download_reports(response_object[utils.gs.TE])
-            if utils.gs.AV in file_data.features \
-                    and utils.gs.AV in response_object:
-                AvData.handle_av_response(file_data, response_object)
             if utils.gs.TEX in file_data.features \
                     and utils.gs.TEX in response_object:
                 TexData.handle_tex_response(file_data, response_object, first_time)
-                if  TexData.extracted_file_download_id:
+                if TexData.extracted_file_download_id:
                     extraction_id = TexData.extracted_file_download_id
                     if not self.download_file(extraction_id):
                         Logger.log(LogLevel.ERROR, 'Failed to download extraction_id:', extraction_id)
                         file_data.tex = TexData.error("Unable to download file_id=%s" % extraction_id)
                         return True
-                    else: file_data.tex = TexData.log("Cleaned file was downloaded successfully file_id= %s" % extraction_id)
+                    else:
+                        file_data.tex = TexData.log(
+                            "Cleaned file was downloaded successfully file_id= %s" % extraction_id)
             if not file_data.features:
                 self.finished.append(self.pending.pop(file_data.md5))
 
@@ -225,9 +222,9 @@ class Run:
         if len(name) > 0 and name[0]:
             if image_id:
                 file_name = os.path.join(self.reports_folder,
-                                     '%s_%s' % (str(image_id), str(name[0])))
+                                         '%s_%s' % (str(image_id), str(name[0])))
             else:
-                file_name = os.path.join(self.tex_folder,str(name[0]))
+                file_name = os.path.join(self.tex_folder, str(name[0]))
         else:
             Logger.log(LogLevel.ERROR, 'ERROR FILE NAME')
             return False

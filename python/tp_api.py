@@ -17,9 +17,6 @@ import os
 import time
 from utils.logging import Logger
 from utils.logging import LogLevel
-import platform
-if platform.system() == 'Windows':
-    import utils.win32_unicode_argv
 
 from api.logic import Run
 
@@ -29,54 +26,49 @@ MAX_TRIES = MAX_TIME_MIN * 60 / WAITING_SEC
 
 
 def main():
-
     parser = \
         argparse.ArgumentParser(description='Threat Prevention API example')
 
     files_argument_group = parser.add_mutually_exclusive_group(required=True)
 
     files_argument_group.add_argument('-D', '--directory',
-                        help='The scanning directory')
+                                      help='The scanning directory')
 
     files_argument_group.add_argument('-fp', '--file_path',
-                        help='Path to file')
-
+                                      help='Path to file')
 
     parser.add_argument('-fn', '--file_name',
-                            help='File Name, relevant when file path supplied')
+                        help='File Name, relevant when file path supplied')
     parser.add_argument('-R', '--recursive', action='store_true',
                         help='Emulate the files in the directory recursively, relevant when scanning directory supplied')
 
     server_argument_group = parser.add_mutually_exclusive_group(required=True)
     server_argument_group.add_argument('-k', '--key', help='API key')
-    server_argument_group.add_argument('-e', '--sandblast_appliance',help='Check Point SandBlast Appliance')
-    
+    server_argument_group.add_argument('-e', '--sandblast_appliance', help='Check Point SandBlast Appliance')
+
     parser.add_argument('-d', '--debug', action='store_true',
                         help='Add debugging')
     blades_info = parser.add_argument_group('Blades info')
-    blades_info.add_argument('-t','--te', action='store_true',
-                        help='Activate Threat Emulation')
-    blades_info.add_argument('-a', '--av', action='store_true',
-                        help='Activate Anti-Virus')
+    blades_info.add_argument('-t', '--te', action='store_true',
+                             help='Activate Threat Emulation')
 
     blades_info.add_argument('--tex', action='store_true',
-                        help='Activate Threat Extraction (supported only with cloud)')
+                             help='Activate Threat Extraction (supported only with cloud)')
     blades_info.add_argument('--tex_folder',
                              help='A folder to download the Scrubbing attachments (required when TEX is active)')
     blades_info.add_argument('-m', '--tex_method',
-                        choices=['convert', 'clean'],
-                        default='convert',
-                        help='Scrubbing method. Convert to PDF / CleanContent')
-
+                             choices=['convert', 'clean'],
+                             default='convert',
+                             help='Scrubbing method. Convert to PDF / CleanContent')
 
     reports_section = parser.add_argument_group('Reports info', 'Download Reports')
     reports_section.add_argument('-r', '--reports',
-                         help='A folder to download the reports to (required for cloud)',
-                         required=False)
+                                 help='A folder to download the reports to (required for cloud)',
+                                 required=False)
     reports_section.add_argument('-p', '--pdf', action='store_true',
-                         help='Download PDF reports',)
+                                 help='Download PDF reports', )
     reports_section.add_argument('-x', '--xml', action='store_true',
-                         help='Download XML reports',)
+                                 help='Download XML reports', )
     args = parser.parse_args()
 
     Logger.level = LogLevel.DEBUG if args.debug else LogLevel.INFO
@@ -91,9 +83,7 @@ def main():
     file_name = ""
     directory = ""
 
-
     args.te and features.append('te')
-    args.av and features.append('av')
     args.tex and features.append('extraction')
 
     args.xml and reports.append('xml')
@@ -139,8 +129,6 @@ def main():
             Logger.log(LogLevel.ERROR, 'Invalid file path in input (%s)' % args.file_path)
             exit(-1)
 
-
-
     api = Run(directory,
               file_path,
               file_name,
@@ -158,8 +146,9 @@ def main():
         exit(0)
 
     if directory:
-        Logger.log(LogLevel.INFO, 'Querying %d files from directory: %s'    % (len(api.pending), args.directory))
-    else: Logger.log(LogLevel.INFO, 'Querying file: %s ' % (file_path))
+        Logger.log(LogLevel.INFO, 'Querying %d files from directory: %s' % (len(api.pending), args.directory))
+    else:
+        Logger.log(LogLevel.INFO, 'Querying file: %s ' % (file_path))
 
     api.query_directory(True)
     api.print_arrays_status()
@@ -182,6 +171,7 @@ def main():
     print "return %d" % ret
 
     exit(ret)
+
 
 if __name__ == '__main__':
     main()
