@@ -48,6 +48,7 @@ public class TxBucketHandlerTest {
         argMap.put("d", true);
         argMap.put("p", true);
         argMap.put("x", true);
+        argMap.put("s", false);
         argMap.put("r", true);
         argMap.put("withProxy", false);
         argMap.put("withTex", true);

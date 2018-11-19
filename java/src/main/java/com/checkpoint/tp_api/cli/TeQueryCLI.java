@@ -16,6 +16,8 @@ public class TeQueryCLI {
     private Option helpOption;
     private Map<String, Object> argMap;
 
+    public final String ILLEGAL_REQUEST_SUMMARY_AND_PDF_ERROR_MESSAGE = "Illegal request. Pdf reports are not available in the new Threat Emulation reports format. Requesting for pdf and summary reports simultaneously is not supported.";
+
     public TeQueryCLI() {
         options = new Options();
         argMap = new HashMap<>();
@@ -59,6 +61,10 @@ public class TeQueryCLI {
         OptionBuilder.withLongOpt("xml");
         options.addOption(OptionBuilder.create("x"));
 
+        OptionBuilder.withDescription("Download summary reports");
+        OptionBuilder.withLongOpt("summary");
+        options.addOption(OptionBuilder.create("s"));
+
         OptionBuilder.withDescription("Emulate the files in the directory recursively");
         OptionBuilder.withLongOpt("recursive");
         options.addOption(OptionBuilder.create("r"));
@@ -91,11 +97,15 @@ public class TeQueryCLI {
 
         File file = new File(cmd.getOptionValue("D")); //Checking for valid directory
         if (!file.isDirectory()) {
-            throw new Exception("No such directory as " + cmd.getOptionValue("D"));
+            throw new IllegalArgumentException("No such directory as " + cmd.getOptionValue("D"));
         }
         file = new File(cmd.getOptionValue("R"));
         if (!file.isDirectory()) {
-            throw new Exception("No such directory as " + cmd.getOptionValue("R"));
+            throw new IllegalArgumentException("No such directory as " + cmd.getOptionValue("R"));
+        }
+
+        if (cmd.hasOption("s") && cmd.hasOption("p")) {
+            throw new IllegalArgumentException(ILLEGAL_REQUEST_SUMMARY_AND_PDF_ERROR_MESSAGE);
         }
 
         return true;
@@ -126,6 +136,7 @@ public class TeQueryCLI {
                 putFlag("d");
                 putFlag("p");
                 putFlag("x");
+                putFlag("s");
                 putFlag("r");
                 if (cmd.hasOption("pr")) {
                     argMap.put("withProxy", true);

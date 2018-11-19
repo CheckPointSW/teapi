@@ -69,6 +69,8 @@ def main():
                                  help='Download PDF reports', )
     reports_section.add_argument('-x', '--xml', action='store_true',
                                  help='Download XML reports', )
+    reports_section.add_argument('-s', '--summary', action='store_true',
+                                 help='Download summary reports', )
     args = parser.parse_args()
 
     Logger.level = LogLevel.DEBUG if args.debug else LogLevel.INFO
@@ -86,8 +88,13 @@ def main():
     args.te and features.append('te')
     args.tex and features.append('extraction')
 
+    if (args.summary and args.pdf):
+        parser.error("Illegal request. Pdf reports are not available in the new Threat Emulation reports format. Requesting for pdf and summary reports simultaneously is not supported.")
+        exit(-1)
+
     args.xml and reports.append('xml')
     args.pdf and reports.append('pdf')
+    args.summary and reports.append('summary')
 
     # Verify the user values
     if len(reports) and not args.reports:

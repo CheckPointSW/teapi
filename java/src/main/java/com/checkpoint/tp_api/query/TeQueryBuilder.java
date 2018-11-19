@@ -79,9 +79,10 @@ public class TeQueryBuilder {
 
     @SuppressWarnings("unused")
     public TeQueryBuilder setArgMap(String ScanDirectory, String ReportsDirectory, String APIKey, boolean debug,
-                                    boolean pdfReports, boolean xmlReports, boolean recursive, String host, int port) {
+                                    boolean pdfReports, boolean xmlReports, boolean summaryReports,
+                                    boolean recursive, String host, int port) {
         //In case you don't want to use parser
-        setArgMap(ScanDirectory, ReportsDirectory, APIKey, debug, pdfReports, xmlReports, recursive);
+        setArgMap(ScanDirectory, ReportsDirectory, APIKey, debug, pdfReports, xmlReports, summaryReports, recursive);
         argMap.put("withProxy", true);
         argMap.put("host", host);
         argMap.put("port", port);
@@ -89,7 +90,8 @@ public class TeQueryBuilder {
     }
 
     public TeQueryBuilder setArgMap(String ScanDirectory, String ReportsDirectory, String APIKey, boolean debug,
-                                    boolean pdfReports, boolean xmlReports, boolean recursive) {
+                                    boolean pdfReports, boolean xmlReports, boolean summaryReports,
+                                    boolean recursive) {
         //In case you don't want to use parser
         argMap = new HashMap<>();
         argMap.put("D", ScanDirectory);
@@ -98,6 +100,7 @@ public class TeQueryBuilder {
         argMap.put("d", debug);
         argMap.put("p", pdfReports);
         argMap.put("x", xmlReports);
+        argMap.put("s", summaryReports);
         argMap.put("r", recursive);
         return this;
     }

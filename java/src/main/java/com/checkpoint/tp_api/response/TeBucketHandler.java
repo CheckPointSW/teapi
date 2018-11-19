@@ -54,6 +54,9 @@ public class TeBucketHandler {
         if ((boolean) argMap.get("x")) {
             reports.add("xml");
         }
+        if ((boolean) argMap.get("s")) {
+            reports.add("summary");
+        }
         if ((boolean) argMap.get("withTex")) {
             features.add("extraction");
         }
@@ -157,6 +160,11 @@ public class TeBucketHandler {
             if (xmlReportId != null && reports.contains("xml")) {
                 teQueryBucket.getTeHttpClient().downloadFile(xmlReportId, (String) argMap.get("R"));
             }
+        }
+
+        String summaryReportId = response.getTe().getSummary_report();
+        if (summaryReportId != null && reports.contains("summary")) {
+            teQueryBucket.getTeHttpClient().downloadFile(summaryReportId, (String) argMap.get("R"));
         }
     }
 

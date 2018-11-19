@@ -17,6 +17,7 @@ public class Te {
     private int confidence;
     private int severity;
     private Status status;
+    private String summary_report;
 
     public String getCombined_verdict() {
         return combined_verdict;
@@ -73,4 +74,8 @@ public class Te {
     public void setSeverity(int severity) {
         this.severity = severity;
     }
+
+    public String getSummary_report() { return summary_report; }
+
+    public void setSummary_report(String summary_report) { this.summary_report = summary_report; }
 }

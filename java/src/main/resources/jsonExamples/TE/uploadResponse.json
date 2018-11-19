@@ -38,7 +38,8 @@
         "code" : 1002,
         "label" : "UPLOAD_SUCCESS",
         "message" : "The file was uploaded successfully."
-      }
+      },
+      "summary_report" : null
     }
   }
 }

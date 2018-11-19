@@ -29,7 +29,7 @@ python tp_api.py --help
 usage: tp_api.py [-h] (-D DIRECTORY | -fp FILE_PATH) [-fn FILE_NAME] [-R]
                  (-k KEY | -e SANDBLAST_APPLIANCE) [-d] [-t] [-a] [--tex]
                  [--tex_folder TEX_FOLDER] [-m {convert,clean}] [-r REPORTS]
-                 [-p] [-x]
+                 [-p] [-x] [-s]
 
 Threat Prevention API example
 
@@ -65,5 +65,6 @@ Reports info:
                         cloud)
   -p, --pdf             Download PDF reports
   -x, --xml             Download XML reports
+  -s, --summary         Download summary reports
 
 ~~~~
