@@ -7,9 +7,13 @@ import com.checkpoint.tp_api.query.TeQueryBuilder;
  */
 public class Program {
     public static void main(String[] args) throws Exception{
+        try {
         new TeQueryBuilder()
                 .parseArgs(args) //Can use setArgMap() instead
                 .build()
                 .execute();
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
     }
 }

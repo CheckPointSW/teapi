@@ -32,5 +32,6 @@ usage: java com.checkpoint.tp_api.cli.TeQueryCLI
  -r,--recursive                                                    Emulate the files in the directory recursively
  -tex,--extraction <method('convert'/'clean'), clean files path>   Activate Threat Extraction (supported only with cloud); Scrubbing method. Convert to PDF / CleanContent
  -x,--xml                                                          Download XML reports
+ -s,--summary                                                      Download summary reports
 
 ~~~~

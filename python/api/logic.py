@@ -178,6 +178,9 @@ class Run:
         if json_response.status_code != 200:
             Logger.log(LogLevel.ERROR, json_response.status_code)
             Logger.log(LogLevel.ERROR, json_response.text)
+            if json_response.status_code == 400:
+                Logger.log(LogLevel.ERROR, "Bad request: please fix and rerun the command")
+                exit(-1)
             return False
 
         parse_json = json.loads(json_response.text)
@@ -201,7 +204,7 @@ class Run:
                 TexData.handle_tex_response(file_data, response_object, first_time)
                 if TexData.extracted_file_download_id:
                     extraction_id = TexData.extracted_file_download_id
-                    if not self.download_file(extraction_id):
+                    if not self.download_tex_result(extraction_id):
                         Logger.log(LogLevel.ERROR, 'Failed to download extraction_id:', extraction_id)
                         file_data.tex = TexData.error("Unable to download file_id=%s" % extraction_id)
                         return True
@@ -213,7 +216,13 @@ class Run:
 
         return True
 
-    def download_file(self, file_id, image_id=0):
+    def download_report(self, file_id, image_id=0):
+        return self.download_file(file_id, self.reports_folder, image_id)
+
+    def download_tex_result(self, file_id):
+        return self.download_file(file_id, self.tex_folder)
+
+    def download_file(self, file_id, dest_folder, image_id=0):
         params = {'id': file_id}
         download_url = utils.gs.get_selector(self.server, utils.gs.DOWNLOAD)
         r = requests.get(download_url, headers=self.headers,
@@ -221,10 +230,10 @@ class Run:
         name = findall('attachment; filename=\"(.*)\"', r.headers['content-disposition'])
         if len(name) > 0 and name[0]:
             if image_id:
-                file_name = os.path.join(self.reports_folder,
+                file_name = os.path.join(dest_folder,
                                          '%s_%s' % (str(image_id), str(name[0])))
             else:
-                file_name = os.path.join(self.tex_folder, str(name[0]))
+                file_name = os.path.join(dest_folder, str(name[0]))
         else:
             Logger.log(LogLevel.ERROR, 'ERROR FILE NAME')
             return False
@@ -245,9 +254,11 @@ class Run:
             for image in json_response['images']:
                 report = image['report']
                 if 'pdf_report' in report:
-                    self.download_file(report['pdf_report'], image['id'])
+                    self.download_report(report['pdf_report'], image['id'])
                 if 'xml_report' in report:
-                    self.download_file(report['xml_report'], image['id'])
+                    self.download_report(report['xml_report'], image['id'])
+        if 'summary_report' in json_response:
+            self.download_report(json_response['summary_report'])
 
     def is_pending_files(self):
         """

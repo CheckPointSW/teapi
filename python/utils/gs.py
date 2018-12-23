@@ -48,6 +48,7 @@ TEX = 'extraction'
 
 PDF = 'pdf'
 XML = 'xml'
+SUMMARY = 'summary'
 
 # Response Strings
 STATUS = 'status'
