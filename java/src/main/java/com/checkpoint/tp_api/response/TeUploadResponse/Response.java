@@ -1,6 +1,7 @@
 package com.checkpoint.tp_api.response.TeUploadResponse;
 
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.List;
@@ -10,9 +11,12 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Response {
     private Status status;
     private String md5;
+    private String sha1;
+    private String sha256;
     private String file_type;
     private String file_name;
     private List<String> features;
@@ -42,6 +46,14 @@ public class Response {
     public void setMd5(String md5) {
         this.md5 = md5;
     }
+
+    public String getSha1() { return sha1; }
+
+    public void setSha1(String sha1) { this.sha1 = sha1; }
+
+    public String getSha256() { return sha256; }
+
+    public void setSha256(String sha256) { this.sha256 = sha256; }
 
     public String getFile_name() {
         return file_name;

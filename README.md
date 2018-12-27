@@ -12,7 +12,7 @@ Enable an easy start for Threat Prevention API users with a detailed example on 
 Start by cloning the project:
 
 ~~~~
-git clone https://bitbucket.org/chkp/teapi.git
+git clone https://github.com/CheckPointSW/teapi.git
 ~~~~
 
 ## License
