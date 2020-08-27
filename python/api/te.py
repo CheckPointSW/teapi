@@ -40,9 +40,9 @@ class TeData:
         return te_data
 
     def __str__(self):
-        if self.verdict == utils.gs.BENIGN:
+        if self.verdict.lower() == utils.gs.BENIGN.lower():
             return 'TE: Benign'
-        elif self.verdict == utils.gs.MALICIOUS:
+        elif self.verdict.lower() == utils.gs.MALICIOUS.lower():
             return 'TE: Malicious, Severity: %d, Confidence: %d' % (
                 self.severity, self.confidence)
         else:
@@ -63,13 +63,13 @@ class TeData:
             file_data.upload = False
             if utils.gs.TE_VERDICT in te_object:
                 if te_object[
-                    utils.gs.TE_VERDICT] == \
-                        utils.gs.BENIGN:
+                    utils.gs.TE_VERDICT].lower() == \
+                        utils.gs.BENIGN.lower():
                     file_data.te = TeData.benign()
                     found = True
                 elif te_object[
-                    utils.gs.TE_VERDICT] == \
-                        utils.gs.MALICIOUS:
+                    utils.gs.TE_VERDICT].lower() == \
+                        utils.gs.MALICIOUS.lower():
                     file_data.te = TeData.malicious(
                         te_object[utils.gs.TE_CONFIDENCE],
                         te_object[utils.gs.TE_SEVERITY])
