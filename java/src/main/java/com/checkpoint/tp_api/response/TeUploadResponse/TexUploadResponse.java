@@ -1,6 +1,6 @@
 package com.checkpoint.tp_api.response.TeUploadResponse;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Created by edanha on 3/28/2017.

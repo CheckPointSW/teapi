@@ -1,7 +1,7 @@
 package com.checkpoint.tp_api.response;
 
 import com.checkpoint.tp_api.response.TeUploadResponse.Response;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 

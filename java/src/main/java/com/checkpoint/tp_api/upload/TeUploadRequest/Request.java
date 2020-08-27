@@ -1,6 +1,6 @@
 package com.checkpoint.tp_api.upload.TeUploadRequest;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Arrays;
 import java.util.List;

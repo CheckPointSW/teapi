@@ -1,11 +1,12 @@
 package com.checkpoint.tp_api.response.TeUploadResponse;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
 
 /**
  * Created by edanha on 4/18/2017.
  */
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include=Inclusion.NON_NULL)
 public class Extraction {
     private String extract_result;
     private ExtractionData extraction_data;
