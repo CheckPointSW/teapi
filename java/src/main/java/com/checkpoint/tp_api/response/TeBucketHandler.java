@@ -5,8 +5,7 @@ import com.checkpoint.tp_api.logger.TeLogger;
 import com.checkpoint.tp_api.query.*;
 import com.checkpoint.tp_api.response.TeUploadResponse.*;
 import com.checkpoint.tp_api.upload.TeUploadRequest.TeUploadRequest;
-
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.log4j.Logger;
 import org.apache.commons.io.FilenameUtils;

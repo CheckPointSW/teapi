@@ -6,7 +6,8 @@ import com.checkpoint.tp_api.dir.FileToQuery;
 import com.checkpoint.tp_api.dir.TeQueryBucket;
 import com.checkpoint.tp_api.logger.TeLogger;
 import com.checkpoint.tp_api.response.TeBucketHandler;
-import org.apache.log4j.*;
+
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
