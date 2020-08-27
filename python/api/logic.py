@@ -306,8 +306,8 @@ class Run:
         if array_size > 0:
             for one_file in array:
                 if one_file.te:
-                    if one_file.te.status == utils.gs.TE_VERDICT_MALICIOUS or one_file.te.verdict == utils.gs.MALICIOUS:
+                    if one_file.te.status == utils.gs.TE_VERDICT_MALICIOUS or one_file.te.verdict.lower() == utils.gs.MALICIOUS.lower():
                         return True
-                    elif one_file.te.status == utils.gs.TE_VERDICT_BENIGN or one_file.te.verdict == utils.gs.BENIGN:
+                    elif one_file.te.status == utils.gs.TE_VERDICT_BENIGN or one_file.te.verdict.lower() == utils.gs.BENIGN.lower():
                         ret = 0
         return ret
