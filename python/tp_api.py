@@ -35,12 +35,8 @@ def main():
     files_argument_group.add_argument('-D', '--directory', help='The scanning directory')
     files_argument_group.add_argument('-fp', '--file_path', help='Path to file')
 
-    parser.add_argument('-fn', '--file_name',
-                        help='File Name, relevant when file path supplied')
-    parser.add_argument('-R', '--recursive', action='store_true',
-                        help='Emulate the files in the directory recursively, relevant when scanning directory supplied')
-    parser.add_argument('-gt', '--generate_token', action='store_true',
-                        help='Only create the JWT token without sending a request')
+    parser.add_argument('-fn', '--file_name', help='File Name, relevant when file path supplied')
+    parser.add_argument('-R', '--recursive', action='store_true', help='Emulate the files in the directory recursively, relevant when scanning directory supplied')
 
     server_argument_group = parser.add_mutually_exclusive_group(required=not IS_ONLY_GENERATE_TOKEN)
     server_argument_group.add_argument('-k', '--key', help='API key')
@@ -48,6 +44,8 @@ def main():
     server_argument_group.add_argument('-ci', '--client_id', nargs=2, metavar=('CLIENT_ID', 'ACCESS_KEY'),
                                        help='Client ID and Access key, used for JWT token authenticated requests')
 
+    parser.add_argument('-gt', '--generate_token', action='store_true',
+                        help='Only create the JWT token without sending a request')
     parser.add_argument('-d', '--debug', action='store_true', help='Add debugging')
 
     blades_info = parser.add_argument_group('Blades info')

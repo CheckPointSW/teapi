@@ -46,9 +46,8 @@ The script returns:
 ~~~~
 # python tp_api.py --help
 usage: tp_api.py [-h] (-D DIRECTORY | -fp FILE_PATH) [-fn FILE_NAME] [-R]
-                 [-gt]
                  (-k KEY | -e SANDBLAST_APPLIANCE | -ci CLIENT_ID ACCESS_KEY)
-                 [-d] [-t] [--tex] [--tex_folder TEX_FOLDER]
+                 [-gt] [-d] [-t] [--tex] [--tex_folder TEX_FOLDER]
                  [-m {convert,clean}] [-r REPORTS] [-p] [-x] [-s]
 
 Threat Prevention API example
@@ -63,14 +62,14 @@ optional arguments:
                         File Name, relevant when file path supplied
   -R, --recursive       Emulate the files in the directory recursively,
                         relevant when scanning directory supplied
-  -gt, --generate_token
-                        Only create the JWT token without sending a request
   -k KEY, --key KEY     API key
   -e SANDBLAST_APPLIANCE, --sandblast_appliance SANDBLAST_APPLIANCE
                         Check Point SandBlast Appliance
   -ci CLIENT_ID ACCESS_KEY, --client_id CLIENT_ID ACCESS_KEY
                         Client ID and Access key, used for JWT token
                         authenticated requests
+  -gt, --generate_token
+                        Only create the JWT token without sending a request
   -d, --debug           Add debugging
 
 Blades info:
