@@ -14,7 +14,8 @@
 
 
 # URI Strings
-URI = 'https://te.checkpoint.com/tecloud/api/v1/file/'
+URI = 'https://te-stg-eks.kube1.iaas.checkpoint.com/tecloud/api/v1/file/'
+TOKEN_URI = ' https://dev-cloudinfra-gw.kube1.iaas.checkpoint.com/auth/external'
 PORT = "18194"
 REMOTE_DIR = "tecloud/api/v1/file"
 
@@ -29,7 +30,7 @@ DOWNLOAD_SELECTOR = '%s%s' % (URI, DOWNLOAD)
 def get_selector(ip_address,selector):
     url = ""
     if ip_address:
-        url = 'https://%s:%s/%s/%s' %(ip_address,PORT,REMOTE_DIR,selector)
+        url = 'https://%s:%s/%s/%s' % (ip_address, PORT, REMOTE_DIR, selector)
     elif selector == QUERY:
         url = QUERY_SELECTOR
     elif selector == UPLOAD:

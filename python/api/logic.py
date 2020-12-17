@@ -22,6 +22,7 @@ import utils.gs
 from api.request import Payload
 from te import TeData
 from tex import TexData
+from token import Token
 from utils.file_data import FileData
 from utils.logging import LogLevel
 from utils.logging import Logger
@@ -44,7 +45,7 @@ class Run:
     cookies = {}
     report_set = set()
 
-    def __init__(self, scan_directory, file_path, file_name, api_key, server, reports_folder, tex_method, tex_folder,
+    def __init__(self, scan_directory, file_path, file_name, api_key, client_id, access_key, generate_token, server, reports_folder, tex_method, tex_folder,
                  features=DEFAULT_FEATURES,
                  reports=DEFAULT_REPORTS,
                  recursive=DEFAULT_RECURSIVE_EMULATION):
@@ -64,14 +65,30 @@ class Run:
         """
         if api_key:
             self.headers = {'Authorization': api_key}
+        elif client_id and access_key:
+            try:
+                token_obj = Token()
+                api_token = token_obj.generate(client_id, access_key)
+                if generate_token:
+                    print(api_token)
+                    exit(0)
+                else:
+                    Logger.log(LogLevel.INFO, 'Generated token for JWT authentication')
+                    self.headers = {'x-access-token': api_token}
+            except Exception as e:
+                Logger.log(LogLevel.CRITICAL, 'failed to generate JWT token', e)
+                exit(-1)
         else:
             self.headers = {}
+
         self.reports_folder = reports_folder
         self.tex_folder = tex_folder
+
         if features:
             self.features = features
         else:
             self.features = DEFAULT_FEATURES
+
         self.payload = Payload(reports, tex_method)
         self.server = server
         self.verify = True
@@ -114,7 +131,6 @@ class Run:
             self.cookies['te_cookie'] = response.cookies['te_cookie']
 
     def upload_directory(self):
-
         # Use copy of the list for proper removal
         res = True
         for file_data in self.pending.values():
@@ -249,7 +265,6 @@ class Run:
         return True
 
     def download_reports(self, json_response):
-
         if 'images' in json_response:
             for image in json_response['images']:
                 report = image['report']

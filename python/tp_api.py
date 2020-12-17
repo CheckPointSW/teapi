@@ -14,44 +14,45 @@
 
 import argparse
 import os
+import sys
 import time
 from utils.logging import Logger
 from utils.logging import LogLevel
-
 from api.logic import Run
+from api.token import Token
 
 WAITING_SEC = 30
 MAX_TIME_MIN = 30
 MAX_TRIES = MAX_TIME_MIN * 60 / WAITING_SEC
 
+IS_ONLY_GENERATE_TOKEN = '-gt' in sys.argv or '--generate_token' in sys.argv
+
 
 def main():
-    parser = \
-        argparse.ArgumentParser(description='Threat Prevention API example')
+    parser = argparse.ArgumentParser(description='Threat Prevention API example')
 
-    files_argument_group = parser.add_mutually_exclusive_group(required=True)
-
-    files_argument_group.add_argument('-D', '--directory',
-                                      help='The scanning directory')
-
-    files_argument_group.add_argument('-fp', '--file_path',
-                                      help='Path to file')
+    files_argument_group = parser.add_mutually_exclusive_group(required=not IS_ONLY_GENERATE_TOKEN)
+    files_argument_group.add_argument('-D', '--directory', help='The scanning directory')
+    files_argument_group.add_argument('-fp', '--file_path', help='Path to file')
 
     parser.add_argument('-fn', '--file_name',
                         help='File Name, relevant when file path supplied')
     parser.add_argument('-R', '--recursive', action='store_true',
                         help='Emulate the files in the directory recursively, relevant when scanning directory supplied')
+    parser.add_argument('-gt', '--generate_token', action='store_true',
+                        help='Only create the JWT token without sending a request')
 
-    server_argument_group = parser.add_mutually_exclusive_group(required=True)
+    server_argument_group = parser.add_mutually_exclusive_group(required=not IS_ONLY_GENERATE_TOKEN)
     server_argument_group.add_argument('-k', '--key', help='API key')
     server_argument_group.add_argument('-e', '--sandblast_appliance', help='Check Point SandBlast Appliance')
+    server_argument_group.add_argument('-ci', '--client_id', nargs=2, metavar=('CLIENT_ID', 'ACCESS_KEY'),
+                                       help='Client ID and Access key, used for JWT token authenticated requests')
 
-    parser.add_argument('-d', '--debug', action='store_true',
-                        help='Add debugging')
+    parser.add_argument('-d', '--debug', action='store_true', help='Add debugging')
+
     blades_info = parser.add_argument_group('Blades info')
     blades_info.add_argument('-t', '--te', action='store_true',
                              help='Activate Threat Emulation')
-
     blades_info.add_argument('--tex', action='store_true',
                              help='Activate Threat Extraction (supported only with cloud)')
     blades_info.add_argument('--tex_folder',
@@ -81,6 +82,8 @@ def main():
     reports = []
     server = ""
     key = ""
+    client_id = ""
+    access_key = ""
     file_path = ""
     file_name = ""
     directory = ""
@@ -107,6 +110,13 @@ def main():
             parser.error("API Key supplied, please supply a reports folder")
             exit(-1)
 
+    elif args.client_id:
+        client_id = args.client_id[0]
+        access_key = args.client_id[1]
+        if not args.generate_token and not args.reports:
+            parser.error("API Token supplied, please supply a reports folder")
+            exit(-1)
+
     elif args.sandblast_appliance:
         if args.tex:
             Logger.log(LogLevel.ERROR, 'TEX is not supported with Check Point SandBlast Appliance')
@@ -121,25 +131,29 @@ def main():
             Logger.log(LogLevel.ERROR, 'Invalid tex folder as input')
             exit(-1)
 
-    if args.directory:
-        if not os.path.isdir(args.directory):
-            Logger.log(LogLevel.ERROR, 'Invalid scanning directory in input')
-            exit(-1)
-        directory = args.directory
-    else:
-        file_path = args.file_path.encode('utf-8')
-        if args.file_name and args.file_name != 0:
-            file_name = args.file_name.encode('utf-8')
+    if not args.generate_token:
+        if args.directory:
+            if not os.path.isdir(args.directory):
+                Logger.log(LogLevel.ERROR, 'Invalid scanning directory in input')
+                exit(-1)
+            directory = args.directory
         else:
-            file_name = os.path.basename(file_path)
-        if not os.path.isfile(args.file_path):
-            Logger.log(LogLevel.ERROR, 'Invalid file path in input (%s)' % args.file_path)
-            exit(-1)
+            file_path = args.file_path.encode('utf-8')
+            if args.file_name and args.file_name != 0:
+                file_name = args.file_name.encode('utf-8')
+            else:
+                file_name = os.path.basename(file_path)
+            if not os.path.isfile(args.file_path):
+                Logger.log(LogLevel.ERROR, 'Invalid file path in input (%s)' % args.file_path)
+                exit(-1)
 
     api = Run(directory,
               file_path,
               file_name,
               key,
+              client_id,
+              access_key,
+              args.generate_token,
               server,
               args.reports,
               args.tex_method,
