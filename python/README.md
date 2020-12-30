@@ -13,9 +13,11 @@ python tp_api.py -fp /path/to/file/to/scan -fn file_name -e <Check Point SandBla
 
 ## JWT usage
 
-For JWT authenticated clients, in order to scan a file/folder with automatic token generation, instead of the --api-key argument, you need to provide --client-id argument.  
-For simplicity this command generates new token for each request.  
-The token is valid for 30 minutes and you should keep it for further requests.
+For JWT authenticated clients, a token needs need to be created before accessing the service.  
+By default, a token created is valid for 30 minutes and for an infinite number of requests.  
+The script generates a token on start and uses it throughout its execution.  
+
+To scan a folder using JWT authentication, use the following syntax:
 
 ~~~~
 python tp_api.py -ci <YOUR_CLIENT_ID> <YOUR_ACCESS_KEY> -D /path/to/folder/to/scan -p -r /path/to/reports/folder
@@ -27,7 +29,7 @@ For generating the token only, pass the -gt argument, as follows:
 python tp_api.py -ci <YOUR_CLIENT_ID> <YOUR_ACCESS_KEY> -gt
 ~~~~
 
-If you wish to see your usage of the service, use your token from previous command and run:
+If you wish to see your service consumption, use your token from previous command and run:
 
 ~~~~
 curl -H 'Content-Type: application/json' -H 'x-access-token: <your_token_from_prev_step>' -XGET https://te-cloud-us.checkpoint.com/app/aws/usage
