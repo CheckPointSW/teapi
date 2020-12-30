@@ -13,8 +13,8 @@ python tp_api.py -fp /path/to/file/to/scan -fn file_name -e <Check Point SandBla
 
 ## JWT usage
 
-For JWT authenticated clients, in order to scan a file/folder with automatic token generation, instead of the --api-key argument, you need to provide --client-id argument.
-For simplicity this request generated the token for each request.
+For JWT authenticated clients, in order to scan a file/folder with automatic token generation, instead of the --api-key argument, you need to provide --client-id argument.  
+For simplicity this request generated the token for each request.  
 The token is valid for 30 minutes and you should keep it for further requests.
 
 ~~~~
@@ -40,8 +40,8 @@ python setup.py install
 ## Usage
 
 The script returns:
-0   All files/file are not malicious
-1   One of the files found malicious
+0   All files/file are not malicious  
+1   One of the files found malicious  
 -1  Internal error
 
 ~~~~
