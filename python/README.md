@@ -14,7 +14,7 @@ python tp_api.py -fp /path/to/file/to/scan -fn file_name -e <Check Point SandBla
 ## JWT usage
 
 For JWT authenticated clients, in order to scan a file/folder with automatic token generation, instead of the --api-key argument, you need to provide --client-id argument.  
-For simplicity this request generated the token for each request.  
+For simplicity this command generates new token for each request.  
 The token is valid for 30 minutes and you should keep it for further requests.
 
 ~~~~
