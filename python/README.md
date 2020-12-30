@@ -39,10 +39,10 @@ python setup.py install
 
 ## Usage
 
-The script returns:
-0   All files/file are not malicious  
-1   One of the files found malicious  
--1  Internal error
+The script returns:  
+**0**  -  All files/file are not malicious  
+**1**  -  One of the files found malicious  
+**-1** -  Internal error
 
 ~~~~
 # python tp_api.py --help
