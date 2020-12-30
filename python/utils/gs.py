@@ -14,8 +14,8 @@
 
 
 # URI Strings
-URI = 'https://te-stg-eks.kube1.iaas.checkpoint.com/tecloud/api/v1/file/'
-TOKEN_URI = ' https://dev-cloudinfra-gw.kube1.iaas.checkpoint.com/auth/external'
+URI = 'https://te-api.checkpoint.com/tecloud/api/v1/file/'
+TOKEN_URI = 'https://cloudinfra-gw.portal.checkpoint.com/auth/external'
 PORT = "18194"
 REMOTE_DIR = "tecloud/api/v1/file"
 
