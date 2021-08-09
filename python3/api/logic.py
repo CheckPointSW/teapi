@@ -251,7 +251,7 @@ class Run:
             else:
                 file_name = os.path.join(dest_folder, str(name[0]))
         else:
-            Logger.log(LogLevel.INFO, 'FILE NAME IS MISSING IN HEADER')
+            Logger.log(LogLevel.INFO, 'FILE NAME IS MISSING IN HEADER USING FILE_ID')
             file_name = file_id
         try:
             with open(file_name, 'wb') as f:
