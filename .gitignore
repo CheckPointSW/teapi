@@ -2,3 +2,4 @@
 java/dependency-reduced-pom.xml
 java/.factorypath
 .vscode/settings.json
+python3/*/__pycache__
