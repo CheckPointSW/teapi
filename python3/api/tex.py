@@ -50,7 +50,7 @@ class TexData:
 
             should_upload = False
             """ File was found in response """
-            filename = file_data.file_name.decode('utf-8')
+            filename = file_data.file_name
             file_data.features.remove(utils.gs.TEX)
             if tex_object["extract_result"] == "CP_EXTRACT_RESULT_NOT_SCRUBBED":
                 file_data.tex = TexData.log("%s was not scrubbed" % filename)
